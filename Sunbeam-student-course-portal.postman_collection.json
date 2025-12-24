@@ -1,0 +1,696 @@
+{
+	"info": {
+		"_postman_id": "df8c6813-4fca-495e-9ff9-00f0399d9933",
+		"name": "Sunbeam-student-course-portal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49753318",
+		"_collection_link": "https://jackiesparrow167-6245782.postman.co/workspace/Jack-Sparrow's-Workspace~6874f9ec-5b54-46d2-818d-631ae358f047/collection/49753318-df8c6813-4fca-495e-9ff9-00f0399d9933?action=share&source=collection_link&creator=49753318"
+	},
+	"item": [
+		{
+			"name": "courses",
+			"item": [
+				{
+					"name": "getAllCourses",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"start_date\":\"2025-01-15\",\r\n     \"end_date\":\"2025-07-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/course/all-courses?start_date=2025-12-07&end_date=2025-12-31",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"course",
+								"all-courses"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2025-12-07"
+								},
+								{
+									"key": "end_date",
+									"value": "2025-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"course_name\": \"maths\",\r\n  \"description\": \"Complete math\",\r\n  \"fees\": 75000,\r\n  \"start_date\": \"2025-12-08\",\r\n  \"end_date\": \"2025-12-31\",\r\n  \"video_expire_days\": 87\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/course/add",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"course",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"course_name\": \"math\",\r\n  \"description\": \"spriboot and MySQL\",\r\n  \"fees\": 89700,\r\n  \"start_date\": \"2025-02-01\",\r\n  \"end_date\": \"2025-07-01\",\r\n  \"video_expire_days\": 120\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/course/update/20",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"course",
+								"update",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getActiveCourses",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000//course/all-active-courses",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"",
+								"course",
+								"all-active-courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CourseDelete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/course/delete/20",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"course",
+								"delete",
+								"20"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "student",
+			"item": [
+				{
+					"name": "registertoCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"bob\",\r\n  \"email\": \"bob@gmail.com\",\r\n  \"courseId\": 1,\r\n  \"mobileNo\": \"9876543210\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/student/register-to-course",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"student",
+								"register-to-course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NjQ3Mzg3OSwianRpIjoiMGVkMGUxZDUtMTZhZS00YTZmLWFjZmYtZThmMDhmZWVhMzM2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InJvaGFuQGdtYWlsLmNvbSIsIm5iZiI6MTc2NjQ3Mzg3OSwiY3NyZiI6IjgwYTY4NmM4LTdlYjAtNDBhZS04ZjA3LTgwZGFhOTQ5NjY4MyIsImV4cCI6MTc2NjQ3NDc3OSwicm9sZSI6InN0dWRlbnQifQ.XHnwBJNtjW9VeI9anvMI_Db7T9xeBaA7F8UbBsxht0A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"rohan@gmail.com\",\r\n  \"newPassword\": \"Rohan@123\",\r\n  \"confirmPassword\": \"Rohan@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/student/change-password",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"student",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMycourses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NjU0NzIwNCwianRpIjoiMzJjMDY5ZTAtYmJmMS00YWEzLWI1MzMtYTJjMGU5NDVjMTlkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImJvYkBnbWFpbC5jb20iLCJuYmYiOjE3NjY1NDcyMDQsImNzcmYiOiJkYTI2ODFiZC02ZDRkLTRiMTktYWQzNy01YTM1YTBiN2E2NWMiLCJleHAiOjE3NjY1NDgxMDQsInJvbGUiOiJzdHVkZW50In0.Aw5_9yawNPnne7eFKa_ZLNP7iaXVRvwU_WNn-t1TdtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/student/my-courses?email=bob@gmail.com",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"student",
+								"my-courses"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "bob@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMyCoursesWithVideos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NjU0NzIwNCwianRpIjoiMzJjMDY5ZTAtYmJmMS00YWEzLWI1MzMtYTJjMGU5NDVjMTlkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImJvYkBnbWFpbC5jb20iLCJuYmYiOjE3NjY1NDcyMDQsImNzcmYiOiJkYTI2ODFiZC02ZDRkLTRiMTktYWQzNy01YTM1YTBiN2E2NWMiLCJleHAiOjE3NjY1NDgxMDQsInJvbGUiOiJzdHVkZW50In0.Aw5_9yawNPnne7eFKa_ZLNP7iaXVRvwU_WNn-t1TdtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/student/my-course-with-videos?email=rohan@gmail.com",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"student",
+								"my-course-with-videos"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "rohan@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adminEnrolledStudent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NjU0NzA4NCwianRpIjoiODMxYzE5NDktM2E2Ny00NzZiLTk0Y2UtYWJmNjNiYzM2ODdmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Imluc3RydWN0b3IyQGdtYWlsLmNvbSIsIm5iZiI6MTc2NjU0NzA4NCwiY3NyZiI6ImExYWU0OWNjLTFhNWQtNDYzNC04ZWZjLWQ2OWZlNmQwYWNlYiIsImV4cCI6MTc2NjU0Nzk4NCwicm9sZSI6ImFkbWluIn0.mJgZFlnJqF0cctkDHMvVj00VOST8TvKeh4U-6oDZb-s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/admin/enrolled-students",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"admin",
+								"enrolled-students"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Videos",
+			"item": [
+				{
+					"name": "GetAllVIdeos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/video/all-videos",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"video",
+								"all-videos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateVideos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courseId\": 8,\r\n  \"title\": \"deep learning with EDA\",\r\n  \"youtubeURL\": \"https://youtube.com/os_memory_adv\",\r\n  \"description\": \"adv memory concepts\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/video/update/8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"video",
+								"update",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteVideos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/video/delete/8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"video",
+								"delete",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddVideos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courseId\": 8,\r\n  \"title\": \"deep learning\",\r\n  \"youtubeURL\": \"https://youtube.com/os_cpu\",\r\n  \"description\": \"CPU scheduling algorithms\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/video/add",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"video",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "AdminLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"instructor2@gmail.com\",\r\n    \"password\":\"Admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/auth/login/admin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"auth",
+								"login",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StudentLogin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "courses",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"bob@gmail.com\",\r\n    \"password\":\"Student@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/auth/login/student",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"auth",
+								"login",
+								"student"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -7,23 +7,6 @@ userRouter = Blueprint("users", __name__, url_prefix="/users")
 
 
 
-@userRouter.post("/auth/student-signup")
-def studentSignup():
-    email = request.json["email"]  
-
-    default_password = "Student@123"
-    enc_pwd = crypto.hash(default_password)
-
-    sql = "INSERT INTO users(email, password, role) VALUES (%s, %s, %s)"
-    params = (email, enc_pwd, "student")
-
-    try:
-        result = db.executeQuery(sql, params)
-        return createResult(None, result)
-    except Exception as e:
-        return createResult(str(e), None), 400
-
-
 
 @userRouter.post("/auth/login/student")
 def studentLogin():

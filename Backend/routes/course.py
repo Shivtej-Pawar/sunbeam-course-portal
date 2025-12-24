@@ -5,9 +5,7 @@ from utils.util import createResult
 
 courseRouter=Blueprint("course",__name__,url_prefix="/course")
 
-# @app.get("/course/all-courses")
 @courseRouter.get('/all-courses')
-@jwt_required()
 def getAllcourses():
      sql="SELECT *FROM courses  where start_date=%s and end_date=%s;"
      start_date = request.args.get("start_date")
@@ -72,7 +70,6 @@ def deleteCourse(courseId):
 
 
 @courseRouter.get("/all-active-courses")
-@jwt_required()
 def getActiveCourses():
     sql = "SELECT *FROM courses WHERE CURDATE() BETWEEN start_date AND end_date"
     result = db.executeQuery(sql,None)
