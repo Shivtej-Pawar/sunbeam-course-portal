@@ -1,0 +1,87 @@
+/* ================= HERO SECTION ================= */
+
+.hero-section {
+    min-height: 420px;
+}
+
+.hero-text {
+    padding-right: 20px;
+}
+
+.hero-image-wrapper {
+    align-items: center;
+}
+
+/* HERO IMAGE */
+.home-hero-img {
+    max-width: 420px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.home-hero-img:hover {
+    transform: scale(1.03);
+}
+
+/* ================= COURSE CARDS ================= */
+
+.card-wrapper {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.course-card {
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.course-title {
+    color: #22c7f2;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.course-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.course-note {
+    background-color: #f1f3f5;
+    border: 1px solid #e2e6ea;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+    }
+
+    .hero-text {
+        padding-right: 0;
+        margin-bottom: 30px;
+    }
+
+    .home-hero-img {
+        max-width: 300px;
+    }
+}
