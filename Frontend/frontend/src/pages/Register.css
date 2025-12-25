@@ -1,0 +1,22 @@
+.register-page {
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.register-card input {
+    height: 45px;
+    border-radius: 8px;
+}
+
+.register-card button {
+    height: 45px;
+    border-radius: 8px;
+}
