@@ -1,0 +1,9 @@
+function ManageVideos() {
+  return (
+    <div className="container mt-4">
+      <h2>Manage Videos</h2>
+    </div>
+  )
+}
+
+export default ManageVideos
