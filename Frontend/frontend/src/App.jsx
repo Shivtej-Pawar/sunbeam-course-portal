@@ -15,6 +15,7 @@ import StudentList from './pages/Admin/StudentList'
 // Toast
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Courses from './pages/Courses'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
+        <Route path="/courses" element={<Courses />} />
 
         {/* Admin Routes */}
         <Route path="/admin/courses" element={<ManageCourses />} />
