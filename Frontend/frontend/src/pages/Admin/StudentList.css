@@ -1,0 +1,30 @@
+.student-list {
+  min-height: 80vh;
+}
+
+.filter-card {
+  border-radius: 12px;
+}
+
+.table-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table thead th {
+  font-size: 0.9rem;
+  letter-spacing: 0.4px;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fcff;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+input::placeholder {
+  color: #adb5bd;
+}

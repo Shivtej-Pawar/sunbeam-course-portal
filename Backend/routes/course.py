@@ -74,8 +74,12 @@ def deleteCourse(courseId):
      claims=get_jwt()
      if claims.get("role")!="admin":
           return createResult("Not a Admin",None), 403
-     sql = "DELETE FROM courses WHERE course_id=%s"
-     result=db.executeQuery(sql,(courseId,))
+     db.executeQuery('DELETE FROM students WHERE course_id=%s',(courseId,))
+     db.executeQuery("DELETE FROM videos WHERE course_id=%s",(courseId,))
+     result=db.executeQuery("DELETE FROM courses WHERE course_id=%s",(courseId,))
+     if result==0:
+          createResult("Course not found",None), 404
+     
      return createResult(None,result)
 
 

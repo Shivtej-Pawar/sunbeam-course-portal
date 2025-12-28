@@ -1,0 +1,114 @@
+/* ===== ROOT WRAPPER ===== */
+.manage-courses {
+  font-size: 14px;
+}
+
+/* ===== CARD STYLING ===== */
+.manage-courses .card {
+  height: 100%;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== CARD HEADER ===== */
+.manage-courses .card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* ===== TABLE ===== */
+.course-table th,
+.course-table td {
+  vertical-align: middle;
+  padding: 0.6rem 0.75rem;
+}
+
+.course-table thead th {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ===== DESCRIPTION COLUMN ===== */
+.course-table td p {
+  max-width: 260px;
+  white-space: normal;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.course-table .btn-sm {
+  padding: 0.25rem 0.6rem;
+  font-size: 12px;
+}
+
+/* ===== BADGES ===== */
+.manage-courses .badge {
+  font-weight: 500;
+  padding: 0.4em 0.6em;
+}
+
+/* ===== FORM INPUTS ===== */
+.manage-courses .form-control,
+.manage-courses textarea {
+  font-size: 13px;
+}
+
+/* ===== MODAL OVERLAY ===== */
+.edit-course-modal {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 1050;
+}
+
+/* ===== MODAL CONTENT ===== */
+.edit-course-modal .modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== MODAL HEADER ===== */
+.edit-course-modal .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.edit-course-modal .modal-title {
+  font-weight: 600;
+  color: #0dcaf0;
+}
+
+/* ===== MODAL BODY ===== */
+.edit-course-modal .modal-body {
+  padding: 1.25rem 1.5rem;
+}
+
+.edit-course-modal .form-label {
+  font-weight: 500;
+}
+
+/* ===== MODAL FOOTER ===== */
+.edit-course-modal .modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ===== MODAL ANIMATION ===== */
+.edit-course-modal .modal-dialog {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -44,11 +44,6 @@ export default function Home() {
               and watch high-quality video lectures from anywhere.
             </p>
 
-            <p className="small mt-3">
-              <strong>Tip:</strong>{" "}
-              <span className="text-danger">admin@example.com</span> /{" "}
-              <span className="text-danger">admin@123</span>
-            </p>
           </div>
 
           {/* RIGHT IMAGE */}

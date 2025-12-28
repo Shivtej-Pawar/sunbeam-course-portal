@@ -39,7 +39,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/courses" element={<Courses />} />
 
-        {/* 🔒 ADMIN ROUTES (PROTECTED) */}
+        {/* 🔒 ADMIN ROUTES */}
         <Route
           path="/admin/courses"
           element={

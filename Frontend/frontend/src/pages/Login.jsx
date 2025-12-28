@@ -20,13 +20,13 @@ function Login() {
     const res = await api(email, password);
 
     if (res.status === "success") {
-      // ✅ STORE TOKEN IN ONE PLACE ONLY
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      // ✅ STORE AUTH DATA IN SESSION STORAGE
+      sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("user", JSON.stringify(res.data));
 
       toast.success("Login successful");
 
-      // ✅ ROLE BASED REDIRECT
+      // ✅ ROLE-BASED REDIRECT
       if (role === "admin") {
         navigate("/admin/videos");
       } else {
