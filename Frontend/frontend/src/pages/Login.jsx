@@ -16,17 +16,18 @@ function Login() {
       return
     }
 
-    const api = role === 'student' ? studentLogin : adminLogin
-    const res = await api(email, password)
+  const api = role === 'student' ? studentLogin : adminLogin
+  const res = await api(email, password)
 
-    if (res.status === 'success') {
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('user', JSON.stringify(res.data))
-      toast.success('Login successful')
-      navigate('/home')
-    } else {
-      toast.error(res.error || 'Login failed')
-    }
+   if (res.status === 'success') {
+        sessionStorage.setItem('token', res.data.token)
+        sessionStorage.setItem('user', JSON.stringify(res.data))
+        toast.success('Login successful')
+        navigate('/home')
+     }
+    else {
+         toast.error(res.error || 'Login failed')
+       }
   }
 
   return (

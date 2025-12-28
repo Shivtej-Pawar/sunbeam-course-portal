@@ -8,7 +8,7 @@ function Navbar() {
 
   // keep navbar in sync with login/logout
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
+    const storedUser = sessionStorage.getItem('user')
     setUser(storedUser ? JSON.parse(storedUser) : null)
   }, [location])
 
