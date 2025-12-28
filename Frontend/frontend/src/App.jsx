@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
-
+import { createContext, useState } from 'react'
 // Pages
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -17,9 +17,19 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Courses from './pages/Courses'
 
+// export const LoginContext=createContext()
+
 function App() {
+   
+  //  const[loginStatus,setLoginStatus]=useState(false)
+    
   return (
     <>
+     
+
+      {/* <LoginContext.Provider value={{loginStatus,setLoginStatus}}> */}
+
+      
       <Navbar />
 
       <ToastContainer
@@ -46,6 +56,7 @@ function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      {/* </LoginContext.Provider> */}
     </>
   )
 }

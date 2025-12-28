@@ -8,7 +8,8 @@ export const studentLogin = async (email, password) => {
       email,
       password
     })
-    return res.data
+    return {status:res.data.status, data:res.data.data}
+    
   } catch (err) {
     return err.response?.data || { status: 'error', error: 'Server error' }
   }
@@ -20,7 +21,7 @@ export const adminLogin = async (email, password) => {
       email,
       password
     })
-    return res.data
+  return {status:res.data.status, data:res.data.data}
   } catch (err) {
     return err.response?.data || { status: 'error', error: 'Server error' }
   }
