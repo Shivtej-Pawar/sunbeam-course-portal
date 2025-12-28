@@ -40,3 +40,35 @@
 .read-the-docs {
   color: #888;
 }
+/* Profile modal animation */
+.profile-modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.profile-modal .modal-dialog {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Profile icon hover */
+.profile-btn {
+  transition: transform 0.2s ease;
+}
+
+.profile-btn:hover {
+  transform: scale(1.1);
+}
+.profile-modal img {
+  object-fit: cover;
+  border: 3px solid #0d6efd;
+}
