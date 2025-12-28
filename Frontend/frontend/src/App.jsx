@@ -1,21 +1,22 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import Navbar from './components/Navbar'
+import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import About from './pages/About'
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import About from "./pages/About";
+import Courses from "./pages/Courses";
 
 // Admin Pages
-import ManageCourses from './pages/Admin/ManageCourses'
-import ManageVideos from './pages/Admin/ManageVideos'
-import StudentList from './pages/Admin/StudentList'
+import ManageCourses from "./pages/Admin/ManageCourses";
+import ManageVideos from "./pages/Admin/ManageVideos";
+import StudentList from "./pages/Admin/StudentList";
 
 // Toast
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import Courses from './pages/Courses'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -38,16 +39,39 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/courses" element={<Courses />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/courses" element={<ManageCourses />} />
-        <Route path="/admin/videos" element={<ManageVideos />} />
-        <Route path="/admin/students" element={<StudentList />} />
+        {/* 🔒 ADMIN ROUTES (PROTECTED) */}
+        <Route
+          path="/admin/courses"
+          element={
+            <ProtectedRoute role="admin">
+              <ManageCourses />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/videos"
+          element={
+            <ProtectedRoute role="admin">
+              <ManageVideos />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/students"
+          element={
+            <ProtectedRoute role="admin">
+              <StudentList />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

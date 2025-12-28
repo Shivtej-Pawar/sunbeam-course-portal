@@ -1,0 +1,151 @@
+/* ===== PAGE BACKGROUND ===== */
+.manage-videos {
+  background: linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%);
+  min-height: 100%;
+  animation: fadeInPage 0.4s ease-in;
+}
+
+/* ===== CARDS ===== */
+.manage-videos .card {
+  border-radius: 12px;
+  border: none;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.manage-videos .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+}
+
+/* ===== CARD HEADER ===== */
+.manage-videos .card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 18px;
+}
+
+/* ===== TABLE ===== */
+.manage-videos table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.manage-videos table th {
+  background-color: #f9fafb;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  padding: 12px;
+}
+
+.manage-videos table td {
+  vertical-align: middle;
+  font-size: 13.5px;
+  color: #475569;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.manage-videos table tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* ===== LINKS ===== */
+.manage-videos a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #2563eb;
+  transition: color 0.2s ease;
+}
+
+.manage-videos a:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* ===== BUTTONS ===== */
+.manage-videos .btn-sm {
+  padding: 4px 12px;
+  font-size: 12.5px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.manage-videos .btn-outline-primary:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.manage-videos .btn-outline-danger:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+/* ===== ACTION BUTTON GROUP ===== */
+.manage-videos .action-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ===== FORM ===== */
+.manage-videos .form-label {
+  font-weight: 500;
+  font-size: 13.5px;
+  color: #334155;
+}
+
+.manage-videos .form-control,
+.manage-videos .form-select {
+  font-size: 13.5px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-videos .form-control:focus,
+.manage-videos .form-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ===== PRIMARY ACTION BUTTON ===== */
+.manage-videos .btn-info {
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-videos .btn-info:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.35);
+}
+
+/* ===== SECTION TITLE ===== */
+.manage-videos .section-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+/* ===== FADE IN ANIMATION ===== */
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

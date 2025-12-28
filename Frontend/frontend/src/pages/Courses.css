@@ -1,0 +1,170 @@
+/* ===== PAGE ANIMATION ===== */
+.courses-page {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* ===== PAGE HEADERS ===== */
+.page-title {
+  font-weight: 600;
+  font-size: 26px;
+  color: #1e3a8a;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* ===== COURSE CARD ===== */
+.course-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.course-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(56, 189, 248, 0.08),
+    rgba(14, 165, 233, 0.04)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+
+.course-card:hover::before {
+  opacity: 1;
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 42px rgba(15, 23, 42, 0.14);
+}
+
+/* ===== COURSE TEXT ===== */
+.course-title {
+  font-size: 19px;
+  font-weight: 600;
+  color: #0284c7;
+  margin-bottom: 6px;
+}
+
+.course-desc {
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.course-meta {
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.9;
+}
+
+/* ===== PRIMARY BUTTON (MATCH NAVBAR COLOR) ===== */
+.course-card .btn-primary {
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.course-card .btn-primary:hover {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.45);
+}
+
+/* ===== VIDEOS SECTION ===== */
+.videos-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+  animation: slideDown 0.35s ease;
+}
+
+/* ===== VIDEO ITEM ===== */
+.video-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  animation: fadeUp 0.3s ease;
+}
+
+.video-item:last-child {
+  border-bottom: none;
+}
+
+.video-title {
+  font-weight: 500;
+  font-size: 14.5px;
+  color: #0f172a;
+}
+
+.video-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ===== PLAY VIDEO BUTTON ===== */
+.video-item .btn-outline-info {
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 6px 14px;
+  transition: all 0.2s ease;
+}
+
+.video-item .btn-outline-info:hover {
+  background-color: #0ea5e9;
+  color: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

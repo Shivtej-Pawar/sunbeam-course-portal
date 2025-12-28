@@ -5,14 +5,26 @@ from utils.util import createResult
 
 courseRouter=Blueprint("course",__name__,url_prefix="/course")
 
-@courseRouter.get('/all-courses')
-def getAllcourses():
-     sql="SELECT *FROM courses  where start_date=%s and end_date=%s;"
-     start_date = request.args.get("start_date")
-     end_date = request.args.get("end_date")
-     params=(start_date,end_date)
-     result=db.executeQuery(sql,params)
-     return createResult(None,result)
+@courseRouter.get("/all-courses")
+def getAllCourses():
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+
+    if start_date and end_date:
+        sql = """
+        SELECT * FROM courses
+        WHERE start_date = %s
+          AND end_date = %s
+        """
+        params = (start_date, end_date)
+    else:
+        sql = "SELECT * FROM courses"
+        params = None
+
+    result = db.executeQuery(sql, params)
+    return createResult(None, result)
+
+
 
 
 
@@ -65,8 +77,6 @@ def deleteCourse(courseId):
      sql = "DELETE FROM courses WHERE course_id=%s"
      result=db.executeQuery(sql,(courseId,))
      return createResult(None,result)
-
-
 
 
 @courseRouter.get("/all-active-courses")

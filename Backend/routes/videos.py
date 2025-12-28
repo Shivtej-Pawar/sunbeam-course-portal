@@ -1,16 +1,16 @@
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required, get_jwt
 import utils.db as db
 from utils.util import createResult
-from flask_jwt_extended import jwt_required, get_jwt
+
 videosRouter = Blueprint("videos", __name__, url_prefix="/video")
 
-@videosRouter.get("/all-videos")
-@jwt_required()
+@videosRouter.route("/all-videos", methods=["GET"])
 def get_all_videos():
     courseId = request.args.get("courseId")
 
     if courseId:
-        sql = "SELECT * FROM videos WHERE course_id = %s"
+        sql = "SELECT * FROM videos WHERE course_id=%s"
         result = db.executeQuery(sql, (courseId,))
     else:
         sql = "SELECT * FROM videos"
@@ -18,33 +18,37 @@ def get_all_videos():
 
     return createResult(None, result)
 
-@videosRouter.post("/add")
+
+
+# ================= ADD VIDEO (ADMIN ONLY) =================
+@videosRouter.route("/add", methods=["POST"])
 @jwt_required()
 def add_video():
-    claims=get_jwt()
-    if claims.get("role")!="admin":
-          return createResult("Not a Admin",None), 403
+    claims = get_jwt()
+
+    if claims.get("role") != "admin":
+        return createResult("Admin access required", None), 403
+
     data = request.json
+
     sql = """
-    INSERT INTO videos(course_id, title, youtube_url, description)
+    INSERT INTO videos (course_id, title, youtube_url, description)
     VALUES (%s, %s, %s, %s)
     """
+
     params = (
         data["courseId"],
         data["title"],
-        data["youtubeURL"],
+        data["youtube_url"],
         data["description"]
     )
 
     result = db.executeQuery(sql, params)
     return createResult(None, result)
 
-@videosRouter.put("/update/<int:videoId>")
+@videosRouter.route("/update/<int:videoId>", methods=["PUT"])
 @jwt_required()
 def update_video(videoId):
-    claims=get_jwt()
-    if claims.get("role")!="admin":
-          return createResult("Not a Admin",None), 403
     data = request.json
 
     sql = """
@@ -52,24 +56,27 @@ def update_video(videoId):
     SET course_id=%s, title=%s, youtube_url=%s, description=%s
     WHERE video_id=%s
     """
+
     params = (
         data["courseId"],
         data["title"],
-        data["youtubeURL"],
+        data["youtube_url"],
         data["description"],
         videoId
     )
 
-    result = db.executeQuery(sql, params)
-    return createResult(None, result)
+    return createResult(None, db.executeQuery(sql, params))
 
-@videosRouter.delete("/delete/<int:videoId>")
+
+# ================= DELETE VIDEO (ADMIN ONLY) =================
+@videosRouter.route("/delete/<int:videoId>", methods=["DELETE"])
 @jwt_required()
 def delete_video(videoId):
-    claims=get_jwt()
-    if claims.get("role")!="admin":
-          return createResult("Not a Admin",None), 403
-    sql = "DELETE FROM videos WHERE video_id = %s"
+    claims = get_jwt()
+
+    if claims.get("role") != "admin":
+        return createResult("Admin access required", None), 403
+
+    sql = "DELETE FROM videos WHERE video_id=%s"
     result = db.executeQuery(sql, (videoId,))
     return createResult(None, result)
-
