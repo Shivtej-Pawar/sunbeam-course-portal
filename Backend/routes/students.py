@@ -4,7 +4,7 @@ import utils.db as db
 from utils.util import createResult, crypto
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
-studentsRouter = Blueprint("students", __name__, url_prefix="/students")
+studentsRouter = Blueprint("student", __name__, url_prefix="/student")
 
 
 

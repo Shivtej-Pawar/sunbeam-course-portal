@@ -9,3 +9,55 @@ export async function getEnrolled_students(courseId,token)
       const response=await axios.get(URL,{headers,params})
       return response.data
 }
+
+
+
+
+
+/* ========== CHANGE PASSWORD ========== */
+export const changeStudentPassword = async (
+  token,
+  newPassword,
+  confirmPassword
+) => {
+  try {
+    const res = await axios.put(
+      config.BASE_URL+`/students/change-password`,
+      { newPassword, confirmPassword },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return res.data
+  } catch (err) {
+    return err.response?.data || { status: 'error' }
+  }
+}
+
+/* ========== UPLOAD PROFILE PIC ========== */
+export const uploadProfilePic = async (token, file) => {
+  const formData = new FormData()
+  formData.append('profilePic', file)
+
+  try {
+    const res = await axios.put(
+      config.BASE_URL+`/students/upload-profile-pic`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return res.data
+  } catch (err) {
+    return err.response?.data || { status: 'error' }
+  }
+}
+
+/* ========== PROFILE PIC URL ========== */
+export const getProfilePicUrl = (email) => {
+  return config.BASE_URL+`/students/profile-pic/${email}`
+}
