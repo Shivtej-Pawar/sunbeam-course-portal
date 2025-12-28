@@ -1,3 +1,29 @@
+/* ================= GLOBAL ANIMATION UTILITIES ================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: revealUp 0.9s ease forwards;
+}
+
+.reveal-delay-1 {
+  animation-delay: 0.15s;
+}
+
+.reveal-delay-2 {
+  animation-delay: 0.3s;
+}
+
+.reveal-delay-3 {
+  animation-delay: 0.45s;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 /* ================= HERO SECTION ================= */
 
 .hero-section {
@@ -8,11 +34,21 @@
   padding-right: 20px;
 }
 
+.hero-text h1 {
+  animation: revealUp 0.9s ease forwards;
+}
+
+.hero-text p {
+  opacity: 0;
+  animation: revealUp 0.9s ease forwards;
+  animation-delay: 0.2s;
+}
+
+/* HERO IMAGE */
 .hero-image-wrapper {
   align-items: center;
 }
 
-/* HERO IMAGE */
 .home-hero-img {
   max-width: 420px;
   width: 100%;
@@ -20,13 +56,21 @@
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: imageFloat 6s ease-in-out infinite;
 }
 
 .home-hero-img:hover {
-  transform: scale(1.03);
+  transform: scale(1.04);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.18);
 }
 
+/* soft floating effect */
+@keyframes imageFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
 /* ================= COURSE CARDS ================= */
 
 .course-card {
@@ -34,11 +78,12 @@
   border-radius: 10px;
   background-color: #ffffff;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: revealUp 0.8s ease forwards;
 }
 
 .course-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
 }
 
 .course-title {
@@ -50,7 +95,7 @@
 .course-desc {
   font-size: 14px;
   color: #555;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .course-note {
@@ -61,7 +106,57 @@
   font-size: 12px;
   color: #555;
 }
+/* ================= CAREER SECTION ================= */
 
+.career-section {
+  background: #f1f7ff;
+  padding: 80px 0;
+}
+
+.career-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: left;
+  animation: revealUp 0.9s ease forwards;
+}
+
+.career-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  height: 100%;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  animation: revealUp 0.9s ease forwards;
+}
+
+.career-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 42px rgba(15, 23, 42, 0.16);
+}
+
+.career-icon {
+  font-size: 36px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.career-card:hover .career-icon {
+  transform: scale(1.08);
+}
+
+.career-card h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #0c4a6e;
+}
+
+.career-card p {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.6;
+}
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
@@ -76,5 +171,6 @@
 
   .home-hero-img {
     max-width: 300px;
+    animation: none;
   }
 }

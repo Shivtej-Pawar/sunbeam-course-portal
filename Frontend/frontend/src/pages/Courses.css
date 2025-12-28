@@ -1,56 +1,63 @@
-/* ===== PAGE ANIMATION ===== */
+/* ================= PAGE ANIMATION ================= */
+
 .courses-page {
-  animation: fadeIn 0.5s ease-in;
+  animation: pageFadeIn 0.6s ease forwards;
 }
 
-/* ===== PAGE HEADERS ===== */
+/* ================= PAGE HEADERS ================= */
+
 .page-title {
-  font-weight: 600;
-  font-size: 26px;
-  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 28px;
+  color: #0f172a;
+  letter-spacing: -0.3px;
 }
 
 .page-subtitle {
-  font-size: 14px;
+  font-size: 14.5px;
   color: #64748b;
+  margin-top: 4px;
 }
 
-/* ===== COURSE CARD ===== */
+/* ================= COURSE CARD ================= */
+
 .course-card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
+  animation: cardFadeUp 0.6s ease forwards;
 }
 
+/* soft highlight overlay */
 .course-card::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     120deg,
-    rgba(56, 189, 248, 0.08),
+    rgba(56, 189, 248, 0.09),
     rgba(14, 165, 233, 0.04)
   );
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
   pointer-events: none;
 }
-
 
 .course-card:hover::before {
   opacity: 1;
 }
 
 .course-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 42px rgba(15, 23, 42, 0.14);
+  transform: translateY(-8px);
+  box-shadow: 0 24px 52px rgba(15, 23, 42, 0.16);
 }
 
-/* ===== COURSE TEXT ===== */
+/* ================= COURSE TEXT ================= */
+
 .course-title {
   font-size: 19px;
   font-weight: 600;
@@ -59,10 +66,10 @@
 }
 
 .course-desc {
-  font-size: 14px;
+  font-size: 14.5px;
   color: #475569;
   margin-bottom: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .course-meta {
@@ -71,37 +78,40 @@
   line-height: 1.9;
 }
 
-/* ===== PRIMARY BUTTON (MATCH NAVBAR COLOR) ===== */
+/* ================= PRIMARY BUTTON ================= */
+
 .course-card .btn-primary {
   background: linear-gradient(135deg, #0ea5e9, #38bdf8);
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 15px;
   font-weight: 500;
   padding: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease,
-    background 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
 .course-card .btn-primary:hover {
   background: linear-gradient(135deg, #0284c7, #0ea5e9);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.45);
 }
 
-/* ===== VIDEOS SECTION ===== */
+/* ================= VIDEOS SECTION ================= */
+
 .videos-section {
   margin-top: 18px;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid #e5e7eb;
-  animation: slideDown 0.35s ease;
+  animation: expandDown 0.4s ease;
 }
 
-/* ===== VIDEO ITEM ===== */
+/* ================= VIDEO ITEM ================= */
+
 .video-item {
   padding: 12px 0;
   border-bottom: 1px solid #f1f5f9;
-  animation: fadeUp 0.3s ease;
+  animation: videoFadeUp 0.35s ease;
 }
 
 .video-item:last-child {
@@ -120,26 +130,28 @@
   margin-top: 2px;
 }
 
-/* ===== PLAY VIDEO BUTTON ===== */
+/* ================= PLAY VIDEO BUTTON ================= */
+
 .video-item .btn-outline-info {
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
   padding: 6px 14px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .video-item .btn-outline-info:hover {
   background-color: #0ea5e9;
   color: #ffffff;
   border-color: #0ea5e9;
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.45);
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
+/* ================= ANIMATIONS ================= */
+
+@keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -147,10 +159,10 @@
   }
 }
 
-@keyframes slideDown {
+@keyframes cardFadeUp {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -158,13 +170,36 @@
   }
 }
 
-@keyframes fadeUp {
+@keyframes expandDown {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes videoFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 24px;
+  }
+
+  .course-card {
+    padding: 20px;
   }
 }

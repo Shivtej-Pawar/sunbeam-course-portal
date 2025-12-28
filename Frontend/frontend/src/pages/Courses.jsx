@@ -102,7 +102,7 @@ function Courses() {
             </div>
           </div>
         ))}
-
+          
         {courses.length === 0 && (
           <div className="text-center text-muted">
             No enrolled courses found

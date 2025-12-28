@@ -119,6 +119,64 @@ export default function Home() {
               </div>
             ))}
           </div>
+{/* ================= CAREER INVEST SECTION ================= */}
+<div className="career-section">
+  <div className="container">
+
+    {/* Section Heading */}
+    <div className="mb-5">
+      <h2 className="career-title">Invest in your career</h2>
+      <p className="text-muted mt-2" style={{ maxWidth: 520 }}>
+        Build in-demand skills, earn recognized credentials, and
+        advance your career with industry-focused learning paths.
+      </p>
+    </div>
+
+    <div className="row g-4">
+
+      {/* Card 1 */}
+      <div className="col-md-4">
+        <div className="career-card fade-up">
+          <div className="career-icon">🎯</div>
+          <h5>Explore in-demand skills</h5>
+          <p>
+            Learn practical skills in AI, full-stack development,
+            cloud computing, and core computer science aligned with
+            current industry needs.
+          </p>
+        </div>
+      </div>
+
+      {/* Card 2 */}
+      <div className="col-md-4">
+        <div className="career-card fade-up delay-1">
+          <div className="career-icon">📜</div>
+          <h5>Earn career-ready credentials</h5>
+          <p>
+            Receive course completion certificates that validate
+            your skills and strengthen your resume for job and
+            internship opportunities.
+          </p>
+        </div>
+      </div>
+
+      {/* Card 3 */}
+      <div className="col-md-4">
+        <div className="career-card fade-up delay-2">
+          <div className="career-icon">⭐</div>
+          <h5>Learn from experienced mentors</h5>
+          <p>
+            Get guidance from instructors with real-world industry
+            experience, focused on problem-solving and hands-on
+            learning.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
         </div>
       </div>

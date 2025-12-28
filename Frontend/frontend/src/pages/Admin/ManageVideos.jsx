@@ -15,11 +15,15 @@ function ManageVideos() {
   const [videos, setVideos] = useState([]);
   const [courses, setCourses] = useState([]);
 
+  // form states
   const [courseId, setCourseId] = useState("");
   const [title, setTitle] = useState("");
   const [youtube_url, setYoutubeUrl] = useState("");
   const [description, setDescription] = useState("");
+
+  // edit modal state
   const [editVideoId, setEditVideoId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     fetchVideos();
@@ -36,7 +40,8 @@ function ManageVideos() {
     if (result.status === "success") setCourses(result.data);
   };
 
-  // ✅ FIXED FUNCTION
+  /* ================= ADD VIDEO ================= */
+
   const insertVideo = async () => {
     if (!courseId) return toast.warn("Select course");
     if (!title) return toast.warn("Enter title");
@@ -46,35 +51,54 @@ function ManageVideos() {
     if (!token) return toast.error("Login again as admin");
 
     try {
-      const result = editVideoId
-        ? await updateVideo(
-            editVideoId,
-            courseId,
-            title,
-            youtube_url,
-            description,
-            token
-          )
-        : await addVideo(
-            courseId,
-            title,
-            youtube_url,
-            description,
-            token
-          );
+      const result = await addVideo(
+        courseId,
+        title,
+        youtube_url,
+        description,
+        token
+      );
 
       if (result.status === "success") {
-        toast.success(editVideoId ? "Video updated" : "Video added");
+        toast.success("Video added");
         resetForm();
         fetchVideos();
       } else {
         toast.error(result.error);
       }
     } catch (err) {
-      console.error(err);
       toast.error("Unauthorized or server error");
     }
   };
+
+  /* ================= UPDATE VIDEO ================= */
+
+  const saveEditVideo = async () => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const result = await updateVideo(
+        editVideoId,
+        courseId,
+        title,
+        youtube_url,
+        description,
+        token
+      );
+
+      if (result.status === "success") {
+        toast.success("Video updated");
+        closeEditModal();
+        fetchVideos();
+      } else {
+        toast.error(result.error);
+      }
+    } catch (err) {
+      toast.error("Update failed");
+    }
+  };
+
+  /* ================= DELETE VIDEO ================= */
 
   const trashVideo = async (videoId) => {
     const token = sessionStorage.getItem("token");
@@ -88,12 +112,20 @@ function ManageVideos() {
     }
   };
 
-  const editVideo = (video) => {
+  /* ================= EDIT POPUP ================= */
+
+  const openEditModal = (video) => {
     setEditVideoId(video.video_id);
     setCourseId(video.course_id);
     setTitle(video.title);
     setYoutubeUrl(video.youtube_url);
     setDescription(video.description);
+    setShowEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    resetForm();
   };
 
   const resetForm = () => {
@@ -108,9 +140,9 @@ function ManageVideos() {
     <div className="container-fluid manage-videos py-4">
       <div className="row g-4">
 
-        {/* VIDEO LIST */}
+        {/* ================= VIDEO LIST ================= */}
         <div className="col-lg-7">
-          <div className="card shadow-sm">
+          <div className="card">
             <div className="card-header section-title">
               Manage Videos
             </div>
@@ -140,7 +172,7 @@ function ManageVideos() {
                       <td className="action-btns">
                         <button
                           className="btn btn-outline-primary btn-sm"
-                          onClick={() => editVideo(v)}
+                          onClick={() => openEditModal(v)}
                         >
                           Edit
                         </button>
@@ -167,11 +199,11 @@ function ManageVideos() {
           </div>
         </div>
 
-        {/* ADD / EDIT VIDEO */}
+        {/* ================= ADD VIDEO ================= */}
         <div className="col-lg-5">
-          <div className="card shadow-sm">
+          <div className="card">
             <div className="card-header section-title">
-              {editVideoId ? "Edit Video" : "Add New Video"}
+              Add New Video
             </div>
 
             <div className="card-body">
@@ -211,28 +243,88 @@ function ManageVideos() {
                 onChange={(e) => setDescription(e.target.value)}
               />
 
-              <div className="d-flex justify-content-between">
-                <button
-                  className="btn btn-info text-white"
-                  onClick={insertVideo}
-                >
-                  {editVideoId ? "Update Video" : "Add Video"}
-                </button>
-
-                {editVideoId && (
-                  <button
-                    className="btn btn-secondary"
-                    onClick={resetForm}
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
+              <button
+                className="btn btn-info text-white"
+                onClick={insertVideo}
+              >
+                Add Video
+              </button>
             </div>
           </div>
         </div>
 
       </div>
+
+      {/* ================= EDIT VIDEO POPUP ================= */}
+      {showEditModal && (
+        <div className="modal fade show d-block edit-video-modal">
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content">
+
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Video</h5>
+                <button
+                  className="btn-close"
+                  onClick={closeEditModal}
+                ></button>
+              </div>
+
+              <div className="modal-body">
+                <label className="form-label">Course</label>
+                <select
+                  className="form-select mb-3"
+                  value={courseId}
+                  onChange={(e) => setCourseId(e.target.value)}
+                >
+                  {courses.map((c) => (
+                    <option key={c.course_id} value={c.course_id}>
+                      {c.course_name}
+                    </option>
+                  ))}
+                </select>
+
+                <label className="form-label">Title</label>
+                <input
+                  className="form-control mb-3"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+
+                <label className="form-label">YouTube URL</label>
+                <input
+                  className="form-control mb-3"
+                  value={youtube_url}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                />
+
+                <label className="form-label">Description</label>
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={closeEditModal}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-info text-white"
+                  onClick={saveEditVideo}
+                >
+                  Save Changes
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
