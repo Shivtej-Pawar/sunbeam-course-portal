@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "./config";
 
 // ===================== COURSES (PUBLIC) =====================
-export async function getAllCourses(start_date = "", end_date = "") {
+export async function getAllCourses(start_date,end_date) {
   let URL = config.BASE_URL + "/course/all-courses";
 
   if (start_date && end_date) {

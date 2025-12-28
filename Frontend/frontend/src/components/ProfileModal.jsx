@@ -4,7 +4,7 @@ import {
   uploadProfilePic,
   getProfilePicUrl,
   changeStudentPassword
-} from '../services/studentService'
+} from '../services/studentServices'
 
 function ProfileModal({ user, onClose }) {
   const [newPassword, setNewPassword] = useState('')

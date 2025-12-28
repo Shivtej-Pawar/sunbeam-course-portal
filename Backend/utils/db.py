@@ -3,9 +3,9 @@ import mysql.connector
 def getConnection():
     return mysql.connector.connect(
         host="localhost",
-        port=3307,
+        port=3306,
         user="root",
-        password="Rohan@7248",
+        password="shivtej",
         database="course_portal",
         use_pure=True
     )

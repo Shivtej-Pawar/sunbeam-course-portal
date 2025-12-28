@@ -14,7 +14,7 @@ function Courses() {
   }, []);
 
  const loadCourses = async () => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) {
     toast.error("Please login again");
     return;

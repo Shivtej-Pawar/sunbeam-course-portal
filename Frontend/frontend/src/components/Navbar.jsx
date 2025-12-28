@@ -15,7 +15,8 @@ function Navbar() {
   }, [location])
 
   const logout = () => {
-    localStorage.removeItem('user') // ✅ IMPORTANT FIX
+    sessionStorage.removeItem('user') 
+    sessionStorage.removeItem('token')
     setUser(null)
     navigate('/login')
   }

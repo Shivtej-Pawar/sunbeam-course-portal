@@ -42,7 +42,7 @@ function ManageVideos() {
     if (!title) return toast.warn("Enter title");
     if (!youtube_url) return toast.warn("Enter YouTube URL");
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return toast.error("Login again as admin");
 
     try {
@@ -77,7 +77,7 @@ function ManageVideos() {
   };
 
   const trashVideo = async (videoId) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const result = await deleteVideo(videoId, token);
 
     if (result.status === "success") {
