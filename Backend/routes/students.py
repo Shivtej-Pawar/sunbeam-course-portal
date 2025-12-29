@@ -159,3 +159,21 @@ def get_profile():
     """
     result = db.executeQuery(sql, (email,))
     return createResult(None, result[0])
+
+
+@studentsRouter.get("/is-registered/<int:courseId>")
+@jwt_required()
+def is_registered(courseId):
+    claims = get_jwt()
+    if claims.get("role") != "student":
+        return createResult("Not a student", None), 403
+
+    email = get_jwt_identity()
+
+    sql = """
+        SELECT 1 FROM students
+        WHERE email = %s AND course_id = %s
+    """
+    result = db.executeQuery(sql, (email, courseId))
+
+    return createResult(None, {"registered": len(result) > 0})

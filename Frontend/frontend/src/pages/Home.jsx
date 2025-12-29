@@ -3,6 +3,8 @@ import { getAllCourses } from "../services/courseServices";
 import { useNavigate, useLocation } from "react-router-dom";
 import homeImg from "../assets/pexels/homeimg.png";
 import "./home.css";
+import { toast } from "react-toastify";
+import { isStudentRegistered } from "../services/studentServices";
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
@@ -31,6 +33,45 @@ export default function Home() {
       state: { courseId, courseName },
     });
   };
+
+  /* ================= VIEW VIDEOS LOGIC ================= */
+const handleViewVideos = async (courseId) => {
+  const token = sessionStorage.getItem("token");
+
+  // 1️⃣ Not logged in
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  // 2️⃣ ADMIN → allow directly
+  if (user?.role === "admin") {
+    navigate(`/videos/${courseId}`);
+    return;
+  }
+
+  // 3️⃣ STUDENT → check registration
+  if (user?.role === "student") {
+    const result = await isStudentRegistered(courseId, token);
+
+    if (result.status !== "success") {
+      toast.error("Authorization failed");
+      return;
+    }
+
+    if (!result.data.registered) {
+      toast.warn("Please register first");
+      return;
+    }
+
+    navigate(`/videos/${courseId}`);
+    return;
+  }
+
+  // 4️⃣ Any other role
+  toast.error("Access denied");
+};
+
 
   return (
     <>
@@ -103,7 +144,7 @@ export default function Home() {
                       <strong>End:</strong> {course.end_date}
                     </p>
 
-                    {/* 👇 ADMIN-ONLY STUDENT COUNT (ABOVE BUTTONS) */}
+                    {/* 👇 ADMIN-ONLY STUDENT COUNT */}
                     {isAdmin && (
                       <div className="student-count-badge">
                         <span className="student-icon">🧑‍🎓</span>
@@ -123,7 +164,10 @@ export default function Home() {
                         Register
                       </button>
 
-                      <button className="btn btn-outline-info btn-sm flex-fill">
+                      <button
+                        className="btn btn-outline-info btn-sm flex-fill"
+                        onClick={() => handleViewVideos(course.course_id)}
+                      >
                         View Videos
                       </button>
                     </div>

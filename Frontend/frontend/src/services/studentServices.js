@@ -75,3 +75,19 @@ export const getStudentProfile = async (token) => {
     return err.response?.data || { status: "error" };
   }
 };
+/* ================= CHECK COURSE REGISTRATION ================= */
+export const isStudentRegistered = async (courseId, token) => {
+  try {
+    const res = await axios.get(
+      config.BASE_URL + `/student/is-registered/${courseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    return err.response?.data || { status: "error" };
+  }
+};
