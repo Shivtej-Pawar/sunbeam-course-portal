@@ -1,185 +1,116 @@
 import { useEffect, useState } from "react";
-import { getAllCourses } from "../services/courseServices";
-import { useNavigate, useLocation } from "react-router";
-import homeImg from "../assets/pexels/homeimg.png";
-import "./home.css";
+import "./Courses.css";
+import { toast } from "react-toastify";
+import { getMyCourses } from "../services/courseServices";
+import { getAllVideos } from "../services/videoServices";
 
-export default function Home() {
+function Courses() {
   const [courses, setCourses] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const storedUser = sessionStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const isAdmin = user?.role === "admin";
+  const [videos, setVideos] = useState({});
+  const [expandedCourse, setExpandedCourse] = useState(null);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const result = await getAllCourses();
-        setCourses(result.data || []);
-      } catch (error) {
-        console.error("Failed to load courses", error);
-      }
-    };
+    loadCourses();
+  }, []);
 
-    fetchCourses();
-  }, [location.pathname]);
+ const loadCourses = async () => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login again");
+    return;
+  }
 
-  const goToRegister = (courseId, courseName) => {
-    navigate("/register", {
-      state: { courseId, courseName },
-    });
+  const result = await getMyCourses(token);
+  if (result.status === "success") {
+    setCourses(result.data);
+  } else {
+    toast.error(result.error);
+  }
+};
+
+
+  const toggleVideos = async (courseId) => {
+    if (expandedCourse === courseId) {
+      setExpandedCourse(null);
+      return;
+    }
+
+    const result = await getAllVideos(courseId);
+    if (result.status === "success") {
+      setVideos((prev) => ({ ...prev, [courseId]: result.data }));
+      setExpandedCourse(courseId);
+    } else {
+      toast.error("Failed to load videos");
+    }
   };
 
   return (
-    <>
-      {/* ================= HERO SECTION ================= */}
-      <div className="container my-5">
-        <div className="row align-items-center hero-section">
-
-          <div className="col-md-7 hero-text reveal">
-            <h1 className="fw-bold text-info mb-3">
-              Welcome to Sunbeam Online Course Portal
-            </h1>
-            <p className="text-muted fs-5">
-              Register for industry-oriented courses, manage your learning,
-              and watch high-quality video lectures from anywhere.
-            </p>
-          </div>
-
-          <div className="col-md-5 d-flex justify-content-center hero-image-wrapper reveal reveal-delay-1">
-            <img
-              src={homeImg}
-              alt="Online Courses"
-              className="img-fluid home-hero-img"
-            />
-          </div>
-
-        </div>
+    <div className="container my-4 courses-page">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3 className="page-title">My Enrolled Courses</h3>
+        <span className="page-subtitle">
+          View courses you've registered for and access video lectures
+        </span>
       </div>
 
-      {/* ================= COURSES SECTION ================= */}
-      <div className="bg-light py-5">
-        <div className="container">
+      <div className="row g-4">
+        {courses.map((course) => (
+          <div className="col-md-6" key={course.course_id}>
+            <div className="course-card">
+              <h5 className="course-title">{course.course_name}</h5>
+              <p className="course-desc">{course.description}</p>
 
-          <div className="d-flex justify-content-between align-items-center mb-4 reveal">
-            <h3 className="mb-0">Available Courses</h3>
-            <span className="text-muted small">
-              Browse and register for upcoming batches
-            </span>
-          </div>
-
-          <div className="row g-4">
-            {courses.length === 0 && (
-              <div className="text-center text-muted">
-                No courses available
+              <div className="course-meta">
+                <div><strong>Course ID:</strong> {course.course_id}</div>
+                <div><strong>Fees:</strong> ₹{course.fees}</div>
+                <div><strong>Start Date:</strong> {course.start_date}</div>
+                <div><strong>End Date:</strong> {course.end_date}</div>
+                <div><strong>Video Expire Days:</strong> {course.video_expire_days}</div>
               </div>
-            )}
 
-            {courses.map((course, index) => (
-              <div
-                className="col-12 col-md-6 col-lg-4"
-                key={course.course_id}
+              <button
+                className="btn btn-primary w-100 mt-3"
+                onClick={() => toggleVideos(course.course_id)}
               >
-                <div
-                  className={`card course-card h-100 reveal reveal-delay-${(index % 3) + 1}`}
-                >
-                  <div className="card-body d-flex flex-column">
+                {expandedCourse === course.course_id ? "Hide Videos" : "View Videos"}
+              </button>
 
-                    <h6 className="course-title mb-2">
-                      {course.course_name}
-                    </h6>
-
-                    <p className="course-desc mb-3 flex-grow-1">
-                      {course.description}
-                    </p>
-
-                    <p className="mb-1 small">
-                      <strong>Fees:</strong> ₹{course.fees}
-                    </p>
-                    <p className="mb-1 small">
-                      <strong>Start:</strong> {course.start_date}
-                    </p>
-                    <p className="small">
-                      <strong>End:</strong> {course.end_date}
-                    </p>
-
-                    {/* ADMIN ONLY – STUDENT COUNT */}
-                    {isAdmin && (
-                      <div className="admin-count mt-2 mb-2">
-                        👥 {course.student_count || 0} students enrolled
+              {expandedCourse === course.course_id && (
+                <div className="videos-section">
+                  {videos[course.course_id]?.length > 0 ? (
+                    videos[course.course_id].map((v, index) => (
+                      <div key={v.video_id} className="video-item">
+                        <div className="video-title">
+                          {index + 1}. {v.title}
+                        </div>
+                        <div className="video-desc">{v.description}</div>
+                        <a
+                          href={v.youtube_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn btn-outline-info btn-sm mt-2"
+                        >
+                          Play Video
+                        </a>
                       </div>
-                    )}
-
-                    <div className="d-flex gap-2 mt-2">
-                      <button
-                        className="btn btn-info btn-sm text-white flex-fill"
-                        onClick={() =>
-                          goToRegister(course.course_id, course.course_name)
-                        }
-                      >
-                        Register
-                      </button>
-
-                      <button className="btn btn-outline-info btn-sm flex-fill">
-                        View Videos
-                      </button>
-                    </div>
-
-                    <div className="course-note mt-3">
-                      Courses are public. Login and register to unlock videos.
-                    </div>
-
-                  </div>
+                    ))
+                  ) : (
+                    <div className="text-muted">No videos available</div>
+                  )}
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ================= CAREER SECTION ================= */}
-          <div className="career-section mt-5">
-            <div className="container">
-
-              <div className="mb-5 reveal">
-                <h2 className="career-title">Invest in your career</h2>
-                <p className="text-muted mt-2" style={{ maxWidth: 520 }}>
-                  Build in-demand skills, earn recognized credentials, and
-                  advance your career with industry-focused learning paths.
-                </p>
-              </div>
-
-              <div className="row g-4">
-                <div className="col-md-4">
-                  <div className="career-card reveal">
-                    <div className="career-icon">🎯</div>
-                    <h5>Explore in-demand skills</h5>
-                    <p>Learn practical skills aligned with industry needs.</p>
-                  </div>
-                </div>
-
-                <div className="col-md-4">
-                  <div className="career-card reveal reveal-delay-1">
-                    <div className="career-icon">📜</div>
-                    <h5>Earn credentials</h5>
-                    <p>Certificates that strengthen your resume.</p>
-                  </div>
-                </div>
-
-                <div className="col-md-4">
-                  <div className="career-card reveal reveal-delay-2">
-                    <div className="career-icon">⭐</div>
-                    <h5>Expert mentors</h5>
-                    <p>Guidance from real-world professionals.</p>
-                  </div>
-                </div>
-              </div>
-
+              )}
             </div>
           </div>
-
-        </div>
+        ))}
+          
+        {courses.length === 0 && (
+          <div className="text-center text-muted">
+            No enrolled courses found
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
+
+export default Courses;

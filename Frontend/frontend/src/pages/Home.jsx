@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllCourses } from "../services/courseServices";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import homeImg from "../assets/pexels/homeimg.png";
 import "./home.css";
 
