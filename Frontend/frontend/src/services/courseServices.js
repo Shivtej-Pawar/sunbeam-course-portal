@@ -18,9 +18,18 @@ export async function registerToCourse(name, email, courseId, mobileNo) {
   const URL = config.BASE_URL + "/student/register-to-course";
   const body = { name, email, courseId, mobileNo };
 
-  const response = await axios.post(URL, body);
-  return response.data;
+  try {
+    const response = await axios.post(URL, body);
+    return response.data;
+  } catch (err) {
+    // Axios puts backend response here for 4xx/5xx
+    return err.response?.data || {
+      status: 'error',
+      error: 'Server error'
+    };
+  }
 }
+
 
 export async function getMyCourses(token) {
   const URL = config.BASE_URL + "/student/my-courses";
