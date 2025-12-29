@@ -12,23 +12,29 @@ function Register() {
     const location=useLocation()
     const {courseId,courseName}=location.state || {}
 
-    const register = async () => {
-        if (name === '')
-            toast.warn('name must be entered')
-        else if (email === '')
-            toast.warn('email must be entered')
-        else if (mobile === '')
-            toast.warn('mobile must be entered')
+const register = async () => {
+    if (name === '')
+        toast.warn('name must be entered')
+    else if (email === '')
+        toast.warn('email must be entered')
+    else if (mobile === '')
+        toast.warn('mobile must be entered')
+    else {
+        const result = await registerToCourse(name, email, courseId, mobile)
+
+        if (result.status === 'success') {
+            toast.success('user registered successfully')
+            navigate('/')
+        } 
+        else if (result.error === 'ALREADY_REGISTERED') {
+            toast.info('You are already registered for this course')
+        } 
         else {
-            const result = await registerToCourse(name, email, courseId, mobile)
-            if (result.status === 'success') {
-                toast.success('user registered successfully')
-                navigate('/')
-            } else {
-                toast.error(result.error)
-            }
+            toast.error(result.error || 'Registration failed')
         }
     }
+}
+
 
     return (
         <div className="register-page d-flex justify-content-center align-items-center">
@@ -85,7 +91,7 @@ function Register() {
 
                 <p className="text-center mt-3 mb-0">
                     Already have an account?{" "}
-                    <Link to="/" className="text-info fw-semibold">
+                    <Link to="/login" className="text-info fw-semibold">
                         Login
                     </Link>
                 </p>
