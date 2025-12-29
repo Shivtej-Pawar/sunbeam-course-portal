@@ -11,61 +11,78 @@ function Login() {
   const navigate = useNavigate();
 
   const login = async () => {
-    if (email === "" || password === "") {
+    if (!email || !password) {
       toast.warn("Email and password are required");
       return;
     }
 
-    const api = role === "student" ? studentLogin : adminLogin;
-    const res = await api(email, password);
+    try {
+      const api = role === "student" ? studentLogin : adminLogin;
+      const res = await api(email, password);
 
-    if (res.status === "success") {
-      // ✅ STORE AUTH DATA IN SESSION STORAGE
-      sessionStorage.setItem("token", res.data.token);
-      sessionStorage.setItem("user", JSON.stringify(res.data));
+      if (res.status === "success") {
+        // STORE AUTH DATA
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("user", JSON.stringify(res.data));
 
-      toast.success("Login successful");
+        toast.success("Login successful");
 
-      // ✅ ROLE-BASED REDIRECT
-      if (role === "admin") {
-        navigate("/admin/videos");
+        //  ALWAYS GO TO HOME (ADMIN OR STUDENT)
+        navigate("/home", { replace: true });
       } else {
-        navigate("/home");
+        toast.error(res.error || "Login failed");
       }
-    } else {
-      toast.error(res.error || "Login failed");
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error. Please try again.");
     }
   };
 
   return (
-    <div className="container w-25 mt-5">
-      <h3 className="text-center mb-3">Login</h3>
+    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
+      <div className="card shadow-sm p-4" style={{ width: 360, borderRadius: 12 }}>
 
-      <select
-        className="form-select mb-3"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-      >
-        <option value="student">Student</option>
-        <option value="admin">Admin</option>
-      </select>
+        <h4 className="text-center mb-4 fw-semibold">
+          Login to Sunbeam Portal
+        </h4>
 
-      <input
-        className="form-control mb-3"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        {/* ROLE SELECT */}
+        <select
+          className="form-select mb-3"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
 
-      <input
-        type="password"
-        className="form-control mb-3"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        {/* EMAIL */}
+        <input
+          type="email"
+          className="form-control mb-3"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <button className="btn btn-info w-100" onClick={login}>
-        Login
-      </button>
+        {/* PASSWORD */}
+        <input
+          type="password"
+          className="form-control mb-3"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        {/* LOGIN BUTTON */}
+        <button
+          className="btn btn-info w-100 fw-semibold text-white"
+          onClick={login}
+        >
+          Login
+        </button>
+
+      </div>
     </div>
   );
 }
