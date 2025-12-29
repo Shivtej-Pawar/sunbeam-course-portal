@@ -22,7 +22,7 @@ export const changeStudentPassword = async (
 ) => {
   try {
     const res = await axios.put(
-      config.BASE_URL+`/students/change-password`,
+      config.BASE_URL+`/student/change-password`,
       { newPassword, confirmPassword },
       {
         headers: {
@@ -43,7 +43,7 @@ export const uploadProfilePic = async (token, file) => {
 
   try {
     const res = await axios.put(
-      config.BASE_URL+`/students/upload-profile-pic`,
+      config.BASE_URL+`/student/upload-profile-pic`,
       formData,
       {
         headers: {
@@ -59,5 +59,5 @@ export const uploadProfilePic = async (token, file) => {
 
 /* ========== PROFILE PIC URL ========== */
 export const getProfilePicUrl = (email) => {
-  return config.BASE_URL+`/students/profile-pic/${email}`
+  return config.BASE_URL+`/student/profile-pic/${email}`
 }

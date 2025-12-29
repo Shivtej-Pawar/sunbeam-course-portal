@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
 import { getAllCourses } from "../services/courseServices";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import homeImg from "../assets/pexels/homeimg.png";
 import "./home.css";
 
 export default function Home() {
-
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const storedUser = sessionStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const result = await getAllCourses("2025-12-07", "2025-12-31");
-        setCourses(result.data);
+        const result = await getAllCourses();
+        setCourses(result.data || []);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load courses", error);
       }
     };
+
     fetchCourses();
-  }, []);
+  }, [location.pathname]);
 
   const goToRegister = (courseId, courseName) => {
     navigate("/register", {
-      state: { courseId, courseName }
+      state: { courseId, courseName },
     });
   };
 
@@ -33,20 +38,16 @@ export default function Home() {
       <div className="container my-5">
         <div className="row align-items-center hero-section">
 
-          {/* LEFT CONTENT */}
           <div className="col-md-7 hero-text">
             <h1 className="fw-bold text-info mb-3">
               Welcome to Sunbeam Online Course Portal
             </h1>
-
             <p className="text-muted fs-5">
               Register for industry-oriented courses, manage your learning,
               and watch high-quality video lectures from anywhere.
             </p>
-
           </div>
 
-          {/* RIGHT IMAGE */}
           <div className="col-md-5 d-flex justify-content-center hero-image-wrapper">
             <img
               src={homeImg}
@@ -54,6 +55,7 @@ export default function Home() {
               className="img-fluid home-hero-img"
             />
           </div>
+
         </div>
       </div>
 
@@ -69,7 +71,13 @@ export default function Home() {
           </div>
 
           <div className="row g-4">
-            {courses.map(course => (
+            {courses.length === 0 && (
+              <div className="text-center text-muted">
+                No courses available
+              </div>
+            )}
+
+            {courses.map((course) => (
               <div
                 className="col-12 col-md-6 col-lg-4"
                 key={course.course_id}
@@ -95,7 +103,17 @@ export default function Home() {
                       <strong>End:</strong> {course.end_date}
                     </p>
 
-                    <div className="d-flex gap-2 mt-3">
+                    {/* 👇 ADMIN-ONLY STUDENT COUNT (ABOVE BUTTONS) */}
+                    {isAdmin && (
+                      <div className="student-count-badge">
+                        <span className="student-icon">🧑‍🎓</span>
+                        <span className="student-text">
+                          {course.student_count || 0} enrolled
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="d-flex gap-2 mt-2">
                       <button
                         className="btn btn-info btn-sm text-white flex-fill"
                         onClick={() =>
@@ -119,64 +137,47 @@ export default function Home() {
               </div>
             ))}
           </div>
-{/* ================= CAREER INVEST SECTION ================= */}
-<div className="career-section">
-  <div className="container">
 
-    {/* Section Heading */}
-    <div className="mb-5">
-      <h2 className="career-title">Invest in your career</h2>
-      <p className="text-muted mt-2" style={{ maxWidth: 520 }}>
-        Build in-demand skills, earn recognized credentials, and
-        advance your career with industry-focused learning paths.
-      </p>
-    </div>
+          {/* ================= CAREER SECTION ================= */}
+          <div className="career-section mt-5">
+            <div className="container">
 
-    <div className="row g-4">
+              <div className="mb-5">
+                <h2 className="career-title">Invest in your career</h2>
+                <p className="text-muted mt-2" style={{ maxWidth: 520 }}>
+                  Build in-demand skills, earn recognized credentials,
+                  and advance your career with industry-focused learning paths.
+                </p>
+              </div>
 
-      {/* Card 1 */}
-      <div className="col-md-4">
-        <div className="career-card fade-up">
-          <div className="career-icon">🎯</div>
-          <h5>Explore in-demand skills</h5>
-          <p>
-            Learn practical skills in AI, full-stack development,
-            cloud computing, and core computer science aligned with
-            current industry needs.
-          </p>
-        </div>
-      </div>
+              <div className="row g-4">
+                <div className="col-md-4">
+                  <div className="career-card fade-up">
+                    <div className="career-icon">🎯</div>
+                    <h5>Explore in-demand skills</h5>
+                    <p>Learn practical skills aligned with industry needs.</p>
+                  </div>
+                </div>
 
-      {/* Card 2 */}
-      <div className="col-md-4">
-        <div className="career-card fade-up delay-1">
-          <div className="career-icon">📜</div>
-          <h5>Earn career-ready credentials</h5>
-          <p>
-            Receive course completion certificates that validate
-            your skills and strengthen your resume for job and
-            internship opportunities.
-          </p>
-        </div>
-      </div>
+                <div className="col-md-4">
+                  <div className="career-card fade-up delay-1">
+                    <div className="career-icon">📜</div>
+                    <h5>Earn credentials</h5>
+                    <p>Certificates that strengthen your resume.</p>
+                  </div>
+                </div>
 
-      {/* Card 3 */}
-      <div className="col-md-4">
-        <div className="career-card fade-up delay-2">
-          <div className="career-icon">⭐</div>
-          <h5>Learn from experienced mentors</h5>
-          <p>
-            Get guidance from instructors with real-world industry
-            experience, focused on problem-solving and hands-on
-            learning.
-          </p>
-        </div>
-      </div>
+                <div className="col-md-4">
+                  <div className="career-card fade-up delay-2">
+                    <div className="career-icon">⭐</div>
+                    <h5>Expert mentors</h5>
+                    <p>Guidance from real-world professionals.</p>
+                  </div>
+                </div>
+              </div>
 
-    </div>
-  </div>
-</div>
-
+            </div>
+          </div>
 
         </div>
       </div>

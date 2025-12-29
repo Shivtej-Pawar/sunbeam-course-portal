@@ -10,19 +10,24 @@ def getAllCourses():
     start_date = request.args.get("start_date")
     end_date = request.args.get("end_date")
 
-    if start_date and end_date:
-        sql = """
-        SELECT * FROM courses
-        WHERE start_date = %s
-          AND end_date = %s
-        """
-        params = (start_date, end_date)
-    else:
-        sql = "SELECT * FROM courses"
-        params = None
+    sql = """
+    SELECT 
+        c.*,
+        COUNT(s.email) AS student_count
+    FROM courses c
+    LEFT JOIN students s ON c.course_id = s.course_id
+    """
+    params = []
 
-    result = db.executeQuery(sql, params)
+    if start_date and end_date:
+        sql += " WHERE c.start_date = %s AND c.end_date = %s"
+        params.extend([start_date, end_date])
+
+    sql += " GROUP BY c.course_id"
+
+    result = db.executeQuery(sql, tuple(params))
     return createResult(None, result)
+
 
 
 
