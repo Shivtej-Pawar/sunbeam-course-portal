@@ -17,7 +17,6 @@ def enrolled_students():
     FROM students s
     JOIN courses c ON s.course_id = c.course_id
     """
-
     params = None
     if courseId:
         sql += " WHERE s.course_id = %s"

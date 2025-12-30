@@ -11,11 +11,9 @@ from werkzeug.exceptions import HTTPException
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 300 * 1024
 app.config['CORS_AUTOMATIC_OPTIONS'] = True
-
-# JWT
 enableJWT(app)
 
-# ✅ CORRECT CORS
+# CORRECT CORS
 CORS(
     app,
     resources={r"/*": {"origins": "http://localhost:5173"}},

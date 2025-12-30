@@ -6,15 +6,12 @@ from utils.util import createResult, crypto
 import io
 
 studentsRouter = Blueprint("student", __name__, url_prefix="/student")
-
-# ================= REGISTER STUDENT =================
+#REGISTER STUDENT
 @studentsRouter.post("/register-to-course")
 def register_student():
     try:
         data = request.json
         email = data["email"]
-
-        # Create user if not exists
         check_sql = "SELECT email FROM users WHERE email=%s"
         existing_user = db.executeQuery(check_sql, (email,))
 
@@ -26,8 +23,6 @@ def register_student():
                 VALUES (%s, %s, %s)
             """
             db.executeQuery(user_sql, (email, enc_pwd, "student"))
-
-        #  Register student to course
         student_sql = """
             INSERT INTO students(name, email, course_id, mobile_no)
             VALUES (%s, %s, %s, %s)
@@ -38,20 +33,15 @@ def register_student():
             data["courseId"],
             data["mobileNo"]
         )
-
         db.executeQuery(student_sql, params)
-
         return createResult(None, "Registered successfully")
 
     except Exception as e:
-        #  duplicate registration
         if "Duplicate entry" in str(e):
             return createResult("ALREADY_REGISTERED", None), 409
-
         return createResult(str(e), None), 500
 
-
-# ================= CHANGE PASSWORD =================
+#CHANGE PASSWORD
 @studentsRouter.put("/change-password")
 @jwt_required()
 def change_password():
@@ -65,12 +55,11 @@ def change_password():
 
     email = get_jwt_identity()
     hashed = sha256_crypt.hash(data["newPassword"])
-
     sql = "UPDATE users SET password=%s WHERE email=%s"
     result = db.executeQuery(sql, (hashed, email))
     return createResult(None, result)
 
-# ================= MY COURSES =================
+# MY COURSES
 @studentsRouter.get("/my-courses")
 @jwt_required()
 def my_courses():
@@ -88,7 +77,7 @@ def my_courses():
     result = db.executeQuery(sql, (email,))
     return createResult(None, result)
 
-# ================= MY COURSE WITH VIDEOS =================
+#MY COURSE WITH VIDEOS
 @studentsRouter.get("/my-course-with-videos")
 @jwt_required()
 def my_course_with_videos():
@@ -109,7 +98,7 @@ def my_course_with_videos():
     result = db.executeQuery(sql, (email,))
     return createResult(None, result)
 
-# ================= UPLOAD PROFILE PIC =================
+#UPLOAD PROFILE PIC
 @studentsRouter.put("/upload-profile-pic")
 @jwt_required()
 def upload_profile_pic():
@@ -128,7 +117,7 @@ def upload_profile_pic():
     result = db.executeQuery(sql, (img_bytes, email))
     return createResult(None, result)
 
-# ================= GET PROFILE PIC =================
+# GET PROFILE PIC
 @studentsRouter.get("/profile-pic/<email>")
 def get_profile_pic(email):
     sql = "SELECT profile_pic FROM students WHERE email=%s"
@@ -137,12 +126,19 @@ def get_profile_pic(email):
     if len(result) == 0 or result[0]["profile_pic"] is None:
         return "", 404
 
-    return send_file(
+    response = send_file(
         io.BytesIO(result[0]["profile_pic"]),
         mimetype="image/jpeg"
     )
 
-# ================= GET STUDENT PROFILE =================
+    # DISABLE CACHING
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+
+    return response
+
+#  GET STUDENT PROFILE
 @studentsRouter.get("/profile")
 @jwt_required()
 def get_profile():
@@ -150,7 +146,7 @@ def get_profile():
     if claims.get("role") != "student":
         return createResult("Unauthorized", None), 403
 
-    email = get_jwt_identity()   # ✅ CORRECT & SAFE
+    email = get_jwt_identity() 
 
     sql = """
         SELECT name, email, mobile_no
@@ -169,11 +165,9 @@ def is_registered(courseId):
         return createResult("Not a student", None), 403
 
     email = get_jwt_identity()
-
     sql = """
         SELECT 1 FROM students
         WHERE email = %s AND course_id = %s
     """
     result = db.executeQuery(sql, (email, courseId))
-
     return createResult(None, {"registered": len(result) > 0})
