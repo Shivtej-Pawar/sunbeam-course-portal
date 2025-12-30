@@ -28,11 +28,6 @@ def getAllCourses():
     result = db.executeQuery(sql, tuple(params))
     return createResult(None, result)
 
-
-
-
-
-
 @courseRouter.post("/add")
 @jwt_required()
 def addCourse():
@@ -52,8 +47,6 @@ def addCourse():
      result=db.executeQuery(sql,params)
      return createResult(None,result)
 
-
-
 @courseRouter.put("/update/<int:courseId>")
 @jwt_required()
 def updateCourse(courseId):
@@ -72,7 +65,6 @@ def updateCourse(courseId):
      result=db.executeQuery(sql,params)
      return createResult(None,result)
 
-
 @courseRouter.delete("/delete/<int:courseId>")
 @jwt_required()
 def deleteCourse(courseId):
@@ -86,7 +78,6 @@ def deleteCourse(courseId):
           createResult("Course not found",None), 404
      
      return createResult(None,result)
-
 
 @courseRouter.get("/all-active-courses")
 def getActiveCourses():

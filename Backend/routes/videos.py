@@ -18,9 +18,7 @@ def get_all_videos():
 
     return createResult(None, result)
 
-
-
-# ================= ADD VIDEO (ADMIN ONLY) =================
+#ADD VIDEO (ADMIN ONLY)
 @videosRouter.route("/add", methods=["POST"])
 @jwt_required()
 def add_video():
@@ -35,14 +33,12 @@ def add_video():
     INSERT INTO videos (course_id, title, youtube_url, description)
     VALUES (%s, %s, %s, %s)
     """
-
     params = (
         data["courseId"],
         data["title"],
         data["youtube_url"],
         data["description"]
     )
-
     result = db.executeQuery(sql, params)
     return createResult(None, result)
 
@@ -68,7 +64,7 @@ def update_video(videoId):
     return createResult(None, db.executeQuery(sql, params))
 
 
-# ================= DELETE VIDEO (ADMIN ONLY) =================
+# DELETE VIDEO 
 @videosRouter.route("/delete/<int:videoId>", methods=["DELETE"])
 @jwt_required()
 def delete_video(videoId):

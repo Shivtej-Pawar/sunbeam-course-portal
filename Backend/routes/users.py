@@ -5,9 +5,6 @@ from utils.util import createResult, crypto
 
 userRouter = Blueprint("users", __name__, url_prefix="/users")
 
-
-
-
 @userRouter.post("/auth/login/student")
 def studentLogin():
     email = request.json["email"]
@@ -20,7 +17,6 @@ def studentLogin():
         return createResult("Invalid email or password", None), 401
 
     user = result[0]
-
     if not crypto.verify(password, user["password"]):
         return createResult("Invalid email or password", None), 401
 
@@ -28,10 +24,8 @@ def studentLogin():
         identity=email,
         additional_claims={"role": "student"}
     )
-
     user["password"] = "*****"
     user["token"] = token
-
     return createResult(None, user)
 
 
@@ -39,7 +33,6 @@ def studentLogin():
 def adminLogin():
     email = request.json["email"]
     password = request.json["password"]
-
     sql = "SELECT * FROM users WHERE email=%s AND role='admin'"
     result = db.executeQuery(sql, (email,))
 
@@ -55,7 +48,6 @@ def adminLogin():
         identity=email,
         additional_claims={"role": "admin"}
     )
-
     user["password"] = "*****"
     user["token"] = token
 

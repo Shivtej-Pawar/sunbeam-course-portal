@@ -1,131 +1,103 @@
-import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
-import "./ProfileModal.css"
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "./ProfileModal.css";
 
 import {
   uploadProfilePic,
   getProfilePicUrl,
   changeStudentPassword,
   getStudentProfile
-} from "../services/studentServices"
+} from "../services/studentServices";
 
 function ProfileModal({ user, onClose }) {
+  const [profile, setProfile] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imgRefresh, setImgRefresh] = useState(Date.now());
 
-  const [profile, setProfile] = useState(null)
-  const [newPassword, setNewPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [imgRefresh, setImgRefresh] = useState(Date.now())
-  const [hasProfilePic, setHasProfilePic] = useState(false)
-
-  /* ================= FETCH STUDENT PROFILE ================= */
+  /* ================= FETCH PROFILE ================= */
   useEffect(() => {
     if (user?.role === "student") {
-      fetchProfile()
+      fetchProfile();
     }
-  }, [user?.role])
+  }, [user?.role]);
 
   const fetchProfile = async () => {
-    const token = sessionStorage.getItem("token")
+    const token = sessionStorage.getItem("token");
+    if (!token) return toast.error("Session expired");
 
-    if (!token) {
-      toast.error("Session expired. Please login again")
-      return
+    const result = await getStudentProfile(token);
+    if (result.status === "success") {
+      setProfile(result.data);
+    } else {
+      toast.error(result.error || "Failed to load profile");
     }
+  };
 
-    const result = await getStudentProfile(token)
+  /* ================= UPLOAD PHOTO ================= */
+  const uploadPic = async () => {
+    if (!selectedFile) return toast.warn("Select an image");
+
+    if (selectedFile.size > 200 * 1024)
+      return toast.error("Image must be under 200 KB");
+
+    if (!["image/jpeg", "image/png"].includes(selectedFile.type))
+      return toast.error("Only JPG or PNG allowed");
+
+    const token = sessionStorage.getItem("token");
+    const result = await uploadProfilePic(token, selectedFile);
 
     if (result.status === "success") {
-      setProfile(result.data)
+      toast.success("Profile picture updated");
+      setImgRefresh(Date.now()); // 🔥 FORCE IMAGE REFRESH
     } else {
-      toast.error(result.error || "Failed to load profile")
+      toast.error(result.error || "Upload failed");
     }
-  }
+  };
 
   /* ================= CHANGE PASSWORD ================= */
   const changePassword = async () => {
-    if (!newPassword || !confirmPassword) {
-      toast.warn("All fields are required")
-      return
-    }
+    if (!newPassword || !confirmPassword)
+      return toast.warn("All fields required");
 
-    const token = sessionStorage.getItem("token")
-    if (!token) {
-      toast.error("Session expired. Please login again")
-      return
-    }
-
+    const token = sessionStorage.getItem("token");
     const result = await changeStudentPassword(
       token,
       newPassword,
       confirmPassword
-    )
+    );
 
     if (result.status === "success") {
-      toast.success("Password changed")
-      onClose()
+      toast.success("Password changed");
+      onClose();
     } else {
-      toast.error(result.error || "Password change failed")
+      toast.error(result.error || "Password change failed");
     }
-  }
-
-  /* ================= UPLOAD PROFILE PIC ================= */
-  const uploadPic = async () => {
-    if (!selectedFile) {
-      toast.warn("Select an image first")
-      return
-    }
-
-    if (selectedFile.size > 200 * 1024) {
-      toast.error("Image must be under 200 KB")
-      return
-    }
-
-    if (!["image/jpeg", "image/png"].includes(selectedFile.type)) {
-      toast.error("Only JPG or PNG allowed")
-      return
-    }
-
-    const token = sessionStorage.getItem("token")
-    if (!token) {
-      toast.error("Session expired. Please login again")
-      return
-    }
-
-    const result = await uploadProfilePic(token, selectedFile)
-
-    if (result.status === "success") {
-      toast.success("Profile picture updated")
-      setHasProfilePic(true)
-      setImgRefresh(Date.now())
-    } else {
-      toast.error(result.error || "Upload failed")
-    }
-  }
+  };
 
   return (
     <div className="profile-overlay" onClick={onClose}>
       <div className="profile-popup" onClick={e => e.stopPropagation()}>
-
         {/* HEADER */}
         <div className="profile-header">
-          <h6 className="mb-0">Profile</h6>
+          <h6>Profile</h6>
           <button className="btn-close" onClick={onClose}></button>
         </div>
 
         {/* BODY */}
         <div className="profile-body text-center">
-
-          {/* STUDENT PROFILE PIC (ONLY IF UPLOADED) */}
-          {user.role === "student" && hasProfilePic && (
+          {/* ✅ ALWAYS RENDER IMAGE */}
+          {user.role === "student" && (
             <img
               src={`${getProfilePicUrl(user.email)}?t=${imgRefresh}`}
               alt="Profile"
               className="profile-avatar mb-3"
+              onError={e => (e.target.style.display = "none")}
             />
           )}
 
-          {/* UPLOAD CONTROLS (STUDENT ONLY) */}
+          {/* UPLOAD */}
           {user.role === "student" && (
             <>
               <input
@@ -133,7 +105,6 @@ function ProfileModal({ user, onClose }) {
                 className="form-control mb-2"
                 onChange={e => setSelectedFile(e.target.files[0])}
               />
-
               <button
                 className="btn btn-outline-primary btn-sm mb-3"
                 onClick={uploadPic}
@@ -143,12 +114,12 @@ function ProfileModal({ user, onClose }) {
             </>
           )}
 
-          {/* PROFILE INFO */}
+          {/* INFO */}
           <div className="profile-info text-start">
             <p><strong>Role:</strong> {user.role}</p>
             <p><strong>Email:</strong> {user.email}</p>
 
-            {user.role === "student" && profile && (
+            {profile && (
               <>
                 <p><strong>Name:</strong> {profile.name}</p>
                 <p><strong>Phone:</strong> {profile.mobile_no}</p>
@@ -156,11 +127,11 @@ function ProfileModal({ user, onClose }) {
             )}
           </div>
 
-          {/* CHANGE PASSWORD (STUDENT ONLY) */}
+          {/* PASSWORD */}
           {user.role === "student" && (
             <>
               <hr />
-              <h6 className="text-start">Change Password</h6>
+              <h6>Change Password</h6>
 
               <input
                 type="password"
@@ -168,27 +139,21 @@ function ProfileModal({ user, onClose }) {
                 placeholder="New Password"
                 onChange={e => setNewPassword(e.target.value)}
               />
-
               <input
                 type="password"
                 className="form-control mb-2"
                 placeholder="Confirm Password"
                 onChange={e => setConfirmPassword(e.target.value)}
               />
-
-              <button
-                className="btn btn-primary w-100"
-                onClick={changePassword}
-              >
+              <button className="btn btn-primary w-100" onClick={changePassword}>
                 Change Password
               </button>
             </>
           )}
-
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ProfileModal
+export default ProfileModal;
