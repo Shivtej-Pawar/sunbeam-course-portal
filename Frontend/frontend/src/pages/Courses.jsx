@@ -43,7 +43,19 @@ function Courses() {
       toast.error("Failed to load videos");
     }
   };
+   // courselock
+   const isVideoAccessible=(startDate,endDate)=>{
+       const today=new Date()
+       const start=new Date(startDate)
+       const end=new Date(endDate)
 
+       today.setHours(0,0,0,0)
+       start.setHours(0,0,0,0)
+       end.setHours(23,59,59,999)
+
+       return today>=start && today<=end
+   }
+   
   return (
     <div className="container my-4 courses-page">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -53,8 +65,15 @@ function Courses() {
         </span>
       </div>
 
-      <div className="row g-4">
-        {courses.map((course) => (
+      <div className="row g-4">          
+        {courses.map((course) => {
+            
+            const canAccessVideos = isVideoAccessible(
+                   course.start_date,
+                   course.end_date);
+
+
+           return(
           <div className="col-md-6" key={course.course_id}>
             <div className="course-card">
               <h5 className="course-title">{course.course_name}</h5>
@@ -72,10 +91,21 @@ function Courses() {
                 className="btn btn-primary w-100 mt-3"
                 onClick={() => toggleVideos(course.course_id)}
               >
-                {expandedCourse === course.course_id ? "Hide Videos" : "View Videos"}
+                {canAccessVideos?  expandedCourse === course.course_id ? "Hide Videos" : "View Videos":"Videos Locked"}
               </button>
 
-              {expandedCourse === course.course_id && (
+            {!canAccessVideos && (
+               <div className="text-danger small mt-2">
+                 Videos available only between{" "}
+                 <strong>{course.start_date}</strong> and{" "}
+                 <strong>{course.end_date}</strong>
+               </div>
+             )}  
+                   
+
+
+
+              {expandedCourse === course.course_id && canAccessVideos &&  (
                 <div className="videos-section">
                   {videos[course.course_id]?.length > 0 ? (
                     videos[course.course_id].map((v, index) => (
@@ -101,7 +131,7 @@ function Courses() {
               )}
             </div>
           </div>
-        ))}
+)})}
           
         {courses.length === 0 && (
           <div className="text-center text-muted">
