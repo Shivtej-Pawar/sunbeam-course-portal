@@ -43,7 +43,7 @@ function Courses() {
       toast.error("Failed to load videos");
     }
   };
-   
+   // courselock
    const isVideoAccessible=(startDate,endDate)=>{
        const today=new Date()
        const start=new Date(startDate)
