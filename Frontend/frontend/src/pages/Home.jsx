@@ -80,14 +80,14 @@ const handleViewVideos = async (courseId) => {
         <div className="row align-items-center hero-section">
 
           <div className="col-md-7 hero-text">
-            <h1 className="fw-bold text-info mb-3">
-              Welcome to Sunbeam Online Course Portal
-            </h1>
-            <p className="text-muted fs-5">
-              Register for industry-oriented courses, manage your learning,
-              and watch high-quality video lectures from anywhere.
-            </p>
-          </div>
+               <h1 className="fw-bold text-info mb-3">
+                 Welcome to the Sunbeam Online Learning Portal
+               </h1>
+               <p className="text-muted fs-5">
+                 Enroll in industry-focused courses, track your learning journey,
+                 and access expert-led video lectures anytime, anywhere.
+               </p>
+      </div>
 
           <div className="col-md-5 d-flex justify-content-center hero-image-wrapper">
             <img
