@@ -69,3 +69,14 @@ export async function updateCourse(courseId, course_name, description, fees, sta
   const response = await axios.put(URL, body, { headers });
   return response.data;
 }
+export async function isStudentRegistered(courseId, token) {
+  const URL = config.BASE_URL + `/student/is-registered/${courseId}`;
+
+  const response = await axios.get(URL, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return response.data;
+}

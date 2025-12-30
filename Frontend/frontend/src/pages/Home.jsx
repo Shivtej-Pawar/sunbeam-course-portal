@@ -8,18 +8,29 @@ import { isStudentRegistered } from "../services/studentServices";
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
+  const [registeredMap, setRegisteredMap] = useState({}); // ✅ NEW
   const navigate = useNavigate();
   const location = useLocation();
 
   const storedUser = sessionStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const isAdmin = user?.role === "admin";
+  const token = sessionStorage.getItem("token");
 
+  const isAdmin = user?.role === "admin";
+  const isStudent = user?.role === "student";
+
+  /* ================= FETCH COURSES ================= */
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const result = await getAllCourses();
-        setCourses(result.data || []);
+        const list = result.data || [];
+        setCourses(list);
+
+        // ✅ check registration only for logged-in students
+        if (isStudent && token) {
+          checkRegistrations(list);
+        }
       } catch (error) {
         console.error("Failed to load courses", error);
       }
@@ -28,66 +39,69 @@ export default function Home() {
     fetchCourses();
   }, [location.pathname]);
 
+  /* ================= CHECK REGISTRATION ================= */
+  const checkRegistrations = async (courseList) => {
+    const map = {};
+
+    for (const course of courseList) {
+      try {
+        const res = await isStudentRegistered(course.course_id, token);
+        map[course.course_id] = res.data?.registered || false;
+      } catch {
+        map[course.course_id] = false;
+      }
+    }
+
+    setRegisteredMap(map);
+  };
+
   const goToRegister = (courseId, courseName) => {
     navigate("/register", {
       state: { courseId, courseName },
     });
   };
 
-  /* ================= VIEW VIDEOS LOGIC ================= */
-const handleViewVideos = async (courseId) => {
-  const token = sessionStorage.getItem("token");
-
-  // 1️⃣ Not logged in
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  // 2️⃣ ADMIN → allow directly
-  if (user?.role === "admin") {
-    navigate(`/videos/${courseId}`);
-    return;
-  }
-
-  // 3️⃣ STUDENT → check registration
-  if (user?.role === "student") {
-    const result = await isStudentRegistered(courseId, token);
-
-    if (result.status !== "success") {
-      toast.error("Authorization failed");
+  /* ================= VIEW VIDEOS ================= */
+  const handleViewVideos = async (courseId) => {
+    // not logged in
+    if (!token) {
+      navigate("/login");
       return;
     }
 
-    if (!result.data.registered) {
-      toast.warn("Please register first");
+    // admin → allowed
+    if (isAdmin) {
+      navigate(`/videos/${courseId}`);
       return;
     }
 
-    navigate(`/videos/${courseId}`);
-    return;
-  }
+    // student → must be registered
+    if (isStudent) {
+      if (!registeredMap[courseId]) {
+        toast.warn("Please register first");
+        return;
+      }
+      navigate(`/videos/${courseId}`);
+      return;
+    }
 
-  // 4️⃣ Any other role
-  toast.error("Access denied");
-};
-
+    toast.error("Access denied");
+  };
 
   return (
     <>
       {/* ================= HERO SECTION ================= */}
       <div className="container my-5">
         <div className="row align-items-center hero-section">
-
           <div className="col-md-7 hero-text">
-               <h1 className="fw-bold text-info mb-3">
-                 Welcome to the Sunbeam Online Learning Portal
-               </h1>
-               <p className="text-muted fs-5">
-                 Enroll in industry-focused courses, track your learning journey,
-                 and access expert-led video lectures anytime, anywhere.
-               </p>
-      </div>
+            <h1 className="fw-bold text-info mb-3">
+              Welcome to the Sunbeam Online Learning Portal
+            </h1>
+            <p className="text-muted fs-5">
+              Enroll in industry-focused courses, track your learning journey,
+              and access expert-led video lectures anytime, anywhere.
+            </p>
+          </div>
 
           <div className="col-md-5 d-flex justify-content-center hero-image-wrapper">
             <img
@@ -96,7 +110,6 @@ const handleViewVideos = async (courseId) => {
               className="img-fluid home-hero-img"
             />
           </div>
-
         </div>
       </div>
 
@@ -118,74 +131,88 @@ const handleViewVideos = async (courseId) => {
               </div>
             )}
 
-            {courses.map((course) => (
-              <div
-                className="col-12 col-md-6 col-lg-4"
-                key={course.course_id}
-              >
-                <div className="card course-card h-100">
-                  <div className="card-body d-flex flex-column">
+            {courses.map((course) => {
+              const alreadyRegistered = registeredMap[course.course_id];
 
-                    <h6 className="course-title mb-2">
-                      {course.course_name}
-                    </h6>
+              return (
+                <div
+                  className="col-12 col-md-6 col-lg-4"
+                  key={course.course_id}
+                >
+                  <div className="card course-card h-100">
+                    <div className="card-body d-flex flex-column">
 
-                    <p className="course-desc mb-3 flex-grow-1">
-                      {course.description}
-                    </p>
+                      <h6 className="course-title mb-2">
+                        {course.course_name}
+                      </h6>
 
-                    <p className="mb-1 small">
-                      <strong>Fees:</strong> ₹{course.fees}
-                    </p>
-                    <p className="mb-1 small">
-                      <strong>Start:</strong> {course.start_date}
-                    </p>
-                    <p className="small">
-                      <strong>End:</strong> {course.end_date}
-                    </p>
+                      <p className="course-desc mb-3 flex-grow-1">
+                        {course.description}
+                      </p>
 
-                    {/* 👇 ADMIN-ONLY STUDENT COUNT */}
-                    {isAdmin && (
-                      <div className="student-count-badge">
-                        <span className="student-icon">🧑‍🎓</span>
-                        <span className="student-text">
-                          {course.student_count || 0} enrolled
-                        </span>
+                      <p className="mb-1 small">
+                        <strong>Fees:</strong> ₹{course.fees}
+                      </p>
+                      <p className="mb-1 small">
+                        <strong>Start:</strong> {course.start_date}
+                      </p>
+                      <p className="small">
+                        <strong>End:</strong> {course.end_date}
+                      </p>
+
+                      {/* ADMIN ONLY COUNT */}
+                      {isAdmin && (
+                        <div className="student-count-badge">
+                          <span className="student-icon">🧑‍🎓</span>
+                          <span className="student-text">
+                            {course.student_count || 0} enrolled
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="d-flex gap-2 mt-2">
+
+                        {/* 🔥 REGISTER BUTTON LOGIC */}
+                        {isStudent && alreadyRegistered ? (
+                          <button
+                            className="btn btn-success btn-sm flex-fill"
+                            disabled
+                          >
+                            ✔ Enrolled
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-info btn-sm text-white flex-fill"
+                            onClick={() =>
+                              goToRegister(course.course_id, course.course_name)
+                            }
+                          >
+                            Register
+                          </button>
+                        )}
+
+                        <button
+                          className="btn btn-outline-info btn-sm flex-fill"
+                          onClick={() => handleViewVideos(course.course_id)}
+                        >
+                          View Videos
+                        </button>
                       </div>
-                    )}
 
-                    <div className="d-flex gap-2 mt-2">
-                      <button
-                        className="btn btn-info btn-sm text-white flex-fill"
-                        onClick={() =>
-                          goToRegister(course.course_id, course.course_name)
-                        }
-                      >
-                        Register
-                      </button>
+                      <div className="course-note mt-3">
+                        Courses are public. Login and register to unlock videos.
+                      </div>
 
-                      <button
-                        className="btn btn-outline-info btn-sm flex-fill"
-                        onClick={() => handleViewVideos(course.course_id)}
-                      >
-                        View Videos
-                      </button>
                     </div>
-
-                    <div className="course-note mt-3">
-                      Courses are public. Login and register to unlock videos.
-                    </div>
-
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* ================= CAREER SECTION ================= */}
           <div className="career-section mt-5">
             <div className="container">
-
               <div className="mb-5">
                 <h2 className="career-title">Invest in your career</h2>
                 <p className="text-muted mt-2" style={{ maxWidth: 520 }}>
@@ -193,33 +220,6 @@ const handleViewVideos = async (courseId) => {
                   and advance your career with industry-focused learning paths.
                 </p>
               </div>
-
-              <div className="row g-4">
-                <div className="col-md-4">
-                  <div className="career-card fade-up">
-                    <div className="career-icon">🎯</div>
-                    <h5>Explore in-demand skills</h5>
-                    <p>Learn practical skills aligned with industry needs.</p>
-                  </div>
-                </div>
-
-                <div className="col-md-4">
-                  <div className="career-card fade-up delay-1">
-                    <div className="career-icon">📜</div>
-                    <h5>Earn credentials</h5>
-                    <p>Certificates that strengthen your resume.</p>
-                  </div>
-                </div>
-
-                <div className="col-md-4">
-                  <div className="career-card fade-up delay-2">
-                    <div className="career-icon">⭐</div>
-                    <h5>Expert mentors</h5>
-                    <p>Guidance from real-world professionals.</p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 
