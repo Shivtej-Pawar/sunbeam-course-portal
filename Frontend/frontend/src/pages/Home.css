@@ -141,3 +141,8 @@
     animation: none;
   }
 }
+.badge.bg-success {
+  font-size: 13px;
+  border-radius: 8px;
+  letter-spacing: 0.3px;
+}
