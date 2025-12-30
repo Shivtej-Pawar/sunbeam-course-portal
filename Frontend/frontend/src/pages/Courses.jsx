@@ -56,13 +56,6 @@ function Courses() {
        return today>=start && today<=end
    }
    
-
-   
-
-
-
-
-
   return (
     <div className="container my-4 courses-page">
       <div className="d-flex justify-content-between align-items-center mb-4">
