@@ -77,10 +77,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+      </Routes> 
     </>
   );
 }

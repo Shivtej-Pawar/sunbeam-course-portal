@@ -20,7 +20,7 @@ function ManageCourses() {
   }, []);
 
   const fetchAllCourses = async () => {
-    const result = await getAllCourses("2025-12-07", "2025-12-31");
+    const result = await getAllCourses();
     if (result.status === "success") {
       setCourses(result.data);
     }

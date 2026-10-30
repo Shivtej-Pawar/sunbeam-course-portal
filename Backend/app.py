@@ -10,13 +10,11 @@ from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 300 * 1024
-app.config['CORS_AUTOMATIC_OPTIONS'] = True
 enableJWT(app)
 
-# CORRECT CORS
+# ✅ PythonAnywhere-safe CORS
 CORS(
     app,
-    resources={r"/*": {"origins": "http://localhost:5173"}},
     allow_headers=["Content-Type", "Authorization"],
     supports_credentials=True
 )
@@ -34,6 +32,3 @@ def handle_exception(e):
         return e
     print("Unhandled Exception:", e)
     return {"status": "error", "message": str(e)}, 500
-
-if __name__ == "__main__":
-    app.run(debug=True)

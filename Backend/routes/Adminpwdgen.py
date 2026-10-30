@@ -1,3 +1,4 @@
 from passlib.hash import sha256_crypt
-hashed_pwd = sha256_crypt.hash("Admin@123")
+pwd=input("Enter password:")
+hashed_pwd = sha256_crypt.hash(pwd)
 print(hashed_pwd)

@@ -1,7 +1,3 @@
-CREATE DATABASE IF NOT EXISTS course_portal;
-
-USE course_portal;
-
 CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -38,3 +34,8 @@ CREATE TABLE IF NOT EXISTS videos (
     description VARCHAR(255) NOT NULL,
     FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE
 );
+
+-- Seed admin user: replace the email and the hash.
+-- Generate the hash with:  python Backend/routes/Adminpwdgen.py
+-- INSERT INTO users (email, password, role)
+-- VALUES ('admin@yourmail.com', 'PASTE_HASH_HERE', 'admin');
