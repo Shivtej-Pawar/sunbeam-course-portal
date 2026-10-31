@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllCourses } from "../services/courseServices";
 import { useNavigate, useLocation } from "react-router-dom";
 import homeImg from "../assets/pexels/homeimg.png";
-import "./home.css";
+import "./Home.css";
 import { toast } from "react-toastify";
 import { isStudentRegistered } from "../services/studentServices";
 
