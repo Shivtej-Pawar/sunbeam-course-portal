@@ -12,5 +12,6 @@ def getConnection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
         ssl_ca=CA_PATH,
+        sql_mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION",
         use_pure=True
     )
