@@ -52,3 +52,38 @@ export function ActionButtonsSkeleton() {
     </div>
   );
 }
+
+/**
+ * Placeholder for a card on the "My Enrolled Courses" page (Courses.jsx).
+ * That card is laid out differently from the Home card: a detail list with
+ * five rows and one full-width button. It reuses the same `.course-card`
+ * class and the two-column grid class, so the size matches the real card.
+ */
+export function EnrolledCourseCardSkeleton() {
+  return (
+    <div className="col-md-6" aria-hidden="true">
+      <div className="course-card skeleton-card">
+        {/* title */}
+        <span className="skeleton skeleton-enrolled-title" />
+
+        {/* description (2 lines) */}
+        <div className="skeleton-desc skeleton-enrolled-desc">
+          <span className="skeleton skeleton-line" style={{ width: "96%" }} />
+          <span className="skeleton skeleton-line" style={{ width: "58%" }} />
+        </div>
+
+        {/* Course ID / Fees / Start / End / Video Expire Days */}
+        <div className="skeleton-enrolled-meta">
+          <span className="skeleton skeleton-line" style={{ width: "26%" }} />
+          <span className="skeleton skeleton-line" style={{ width: "22%" }} />
+          <span className="skeleton skeleton-line" style={{ width: "52%" }} />
+          <span className="skeleton skeleton-line" style={{ width: "48%" }} />
+          <span className="skeleton skeleton-line" style={{ width: "36%" }} />
+        </div>
+
+        {/* View Videos button */}
+        <span className="skeleton skeleton-enrolled-btn" />
+      </div>
+    </div>
+  );
+}

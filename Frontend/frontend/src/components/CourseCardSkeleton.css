@@ -69,6 +69,33 @@
   border-radius: 8px;
 }
 
+/* ================= ENROLLED COURSE CARD (Courses page) ================= */
+
+/* Spacing adds up to the real card: title row ≈ 29px, 2 description lines
+   ≈ 48px + 14px gap, 5 detail rows ≈ 128px, then a 46px button. */
+.skeleton-enrolled-title {
+  width: 50%;
+  height: 20px;
+  margin: 1.4px 0 7.4px;
+}
+
+.skeleton-enrolled-desc {
+  margin-bottom: 14px;
+}
+
+.skeleton-enrolled-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 13.65px;
+  padding: 6.83px 0;
+}
+
+.skeleton-enrolled-btn {
+  height: 46.5px;
+  margin-top: 16px;
+  border-radius: 12px;
+}
+
 /* ================= REDUCED MOTION ================= */
 
 @media (prefers-reduced-motion: reduce) {

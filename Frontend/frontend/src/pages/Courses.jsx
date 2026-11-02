@@ -3,11 +3,16 @@ import "./Courses.css";
 import { toast } from "react-toastify";
 import { getMyCourses } from "../services/courseServices";
 import { getAllVideos } from "../services/videoServices";
+import { EnrolledCourseCardSkeleton } from "../components/CourseCardSkeleton";
+
+// how many placeholder cards to show while the courses are loading
+const SKELETON_COUNT = 2;
 
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [videos, setVideos] = useState({});
   const [expandedCourse, setExpandedCourse] = useState(null);
+  const [loading, setLoading] = useState(true); // courses are being fetched
 
   useEffect(() => {
     loadCourses();
@@ -17,14 +22,22 @@ function Courses() {
   const token = sessionStorage.getItem("token");
   if (!token) {
     toast.error("Please login again");
+    setLoading(false);
     return;
   }
 
-  const result = await getMyCourses(token);
-  if (result.status === "success") {
-    setCourses(result.data);
-  } else {
-    toast.error(result.error);
+  try {
+    const result = await getMyCourses(token);
+    if (result.status === "success") {
+      setCourses(result.data);
+    } else {
+      toast.error(result.error);
+    }
+  } catch (error) {
+    console.error("Failed to load enrolled courses", error);
+    toast.error("Failed to load your courses");
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -65,7 +78,19 @@ function Courses() {
         </span>
       </div>
 
-      <div className="row g-4">          
+      <div className="row g-4" aria-busy={loading}>
+        {/* skeleton cards while the courses are loading */}
+        {loading && (
+          <>
+            <span className="visually-hidden" role="status">
+              Loading your courses…
+            </span>
+            {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+              <EnrolledCourseCardSkeleton key={i} />
+            ))}
+          </>
+        )}
+
         {courses.map((course) => {
             
             const canAccessVideos = isVideoAccessible(
@@ -133,7 +158,7 @@ function Courses() {
           </div>
 )})}
           
-        {courses.length === 0 && (
+        {!loading && courses.length === 0 && (
           <div className="text-center text-muted">
             No enrolled courses found
           </div>
