@@ -5,10 +5,18 @@ import homeImg from "../assets/pexels/homeimg.png";
 import "./Home.css";
 import { toast } from "react-toastify";
 import { isStudentRegistered } from "../services/studentServices";
+import CourseCardSkeleton, {
+  ActionButtonsSkeleton,
+} from "../components/CourseCardSkeleton";
+
+// how many placeholder cards to show while courses are loading
+const SKELETON_COUNT = 6;
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
   const [registeredMap, setRegisteredMap] = useState({}); // ✅ NEW
+  const [loading, setLoading] = useState(true); // courses are being fetched
+  const [checkingRegistrations, setCheckingRegistrations] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,10 +37,13 @@ export default function Home() {
 
         // ✅ check registration only for logged-in students
         if (isStudent && token) {
+          setCheckingRegistrations(true);
           checkRegistrations(list);
         }
       } catch (error) {
         console.error("Failed to load courses", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -41,18 +52,20 @@ export default function Home() {
 
   /* ================= CHECK REGISTRATION ================= */
   const checkRegistrations = async (courseList) => {
-    const map = {};
+    // run all checks at the same time instead of one after another
+    const entries = await Promise.all(
+      courseList.map(async (course) => {
+        try {
+          const res = await isStudentRegistered(course.course_id, token);
+          return [course.course_id, res.data?.registered || false];
+        } catch {
+          return [course.course_id, false];
+        }
+      })
+    );
 
-    for (const course of courseList) {
-      try {
-        const res = await isStudentRegistered(course.course_id, token);
-        map[course.course_id] = res.data?.registered || false;
-      } catch {
-        map[course.course_id] = false;
-      }
-    }
-
-    setRegisteredMap(map);
+    setRegisteredMap(Object.fromEntries(entries));
+    setCheckingRegistrations(false);
   };
 
   const goToRegister = (courseId, courseName) => {
@@ -124,8 +137,20 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="row g-4">
-            {courses.length === 0 && (
+          <div className="row g-4" aria-busy={loading}>
+            {/* skeleton cards while courses are loading */}
+            {loading && (
+              <>
+                <span className="visually-hidden" role="status">
+                  Loading courses…
+                </span>
+                {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+                  <CourseCardSkeleton key={i} />
+                ))}
+              </>
+            )}
+
+            {!loading && courses.length === 0 && (
               <div className="text-center text-muted">
                 No courses available
               </div>
@@ -170,6 +195,9 @@ export default function Home() {
                         </div>
                       )}
 
+                      {isStudent && checkingRegistrations ? (
+                        <ActionButtonsSkeleton />
+                      ) : (
                       <div className="d-flex gap-2 mt-2">
 
                         {/* 🔥 REGISTER BUTTON LOGIC */}
@@ -198,6 +226,7 @@ export default function Home() {
                           View Videos
                         </button>
                       </div>
+                      )}
 
                       <div className="course-note mt-3">
                         Courses are public. Login and register to unlock videos.
